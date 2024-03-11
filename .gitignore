@@ -8,3 +8,7 @@
 **/History/**
 *.htm
 *.pdf
+
+Beacon/buzzer circuit.op.raw
+
+Beacon/buzzer circuit.log
