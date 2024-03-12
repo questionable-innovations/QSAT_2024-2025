@@ -428,40 +428,6 @@ GenerateClassCluster=0
 DocumentUniqueId=
 
 [Document23]
-DocumentPath=Libraries\1571983-4\Project Outputs for 1571983-4\1571983-4.IntLib
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=-1
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=
-
-[Document24]
-DocumentPath=Libraries\SSQ-110-03-X-S\SSQ-110-03-X-S\Project Outputs for SSQ-110-03-X-S\SSQ-110-03-X-S.IntLib
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=-1
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=
-
-[Document25]
 DocumentPath=Libraries\RS2BE-10-G-SMT\RS2BE10GSMT.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -478,7 +444,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=AXZUZHVJ
 
-[Document26]
+[Document24]
 DocumentPath=Libraries\RS2BE-10-G-SMT\RS2BE-10-G-SMT.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -495,7 +461,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[Document27]
+[Document25]
 DocumentPath=Libraries\SSM3J328R_LF\SSM3J328R_LF\SSMJ328R_LF.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -512,7 +478,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=GMIVLSFD
 
-[Document28]
+[Document26]
 DocumentPath=Libraries\SSM3J328R_LF\SSM3J328R_LF\SSMJ328R_LF.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -529,7 +495,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=JVHTISAB
 
-[Document29]
+[Document27]
 DocumentPath=Libraries\RT4812GJ8F\RT4812GJ8F.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -546,7 +512,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=NPYAURVV
 
-[Document30]
+[Document28]
 DocumentPath=Libraries\RT4812GJ8F\RT4812GJ8F.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -563,7 +529,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=VOBDOBPS
 
-[Document31]
+[Document29]
 DocumentPath=Libraries\SSQ-105-03-X-S\SAMTEC_SSQ-105-03-S-S.PcbLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -580,7 +546,7 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=RIAJWWFN
 
-[Document32]
+[Document30]
 DocumentPath=Libraries\SSQ-105-03-X-S\SSQ-105-03-S-S.SchLib
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -618,87 +584,7 @@ Variation2=Designator=R?|UniqueId=\OBRYXFZF|Kind=1|AlternatePart=
 Variation3=Designator=R?|UniqueId=\QJSKMJGN|Kind=1|AlternatePart= 
 ParamVariationCount=0
 
-[GeneratedDocument1]
-DocumentPath=Project Outputs for PSat Generic PSU\Design Rule Check - PSU.html
-DItemRevisionGUID=
-
-[GeneratedDocument2]
-DocumentPath=Project Outputs for PSat Generic PSU\NC Drill\PSU-RoundHoles.TXT
-DItemRevisionGUID=
-
-[GeneratedDocument3]
-DocumentPath=Project Outputs for PSat Generic PSU\NC Drill\PSU-SlotHoles.TXT
-DItemRevisionGUID=
-
-[GeneratedDocument4]
-DocumentPath=Project Outputs for PSat Generic PSU\NC Drill\PSU.DRR
-DItemRevisionGUID=
-
-[GeneratedDocument5]
-DocumentPath=Project Outputs for PSat Generic PSU\Gerber\PSU.EXTREP
-DItemRevisionGUID=
-
-[GeneratedDocument6]
-DocumentPath=Project Outputs for PSat Generic PSU\Gerber\PSU.GBL
-DItemRevisionGUID=
-
-[GeneratedDocument7]
-DocumentPath=Project Outputs for PSat Generic PSU\Gerber\PSU.GBO
-DItemRevisionGUID=
-
-[GeneratedDocument8]
-DocumentPath=Project Outputs for PSat Generic PSU\Gerber\PSU.GBP
-DItemRevisionGUID=
-
-[GeneratedDocument9]
-DocumentPath=Project Outputs for PSat Generic PSU\Gerber\PSU.GBS
-DItemRevisionGUID=
-
-[GeneratedDocument10]
-DocumentPath=Project Outputs for PSat Generic PSU\Gerber\PSU.GD1
-DItemRevisionGUID=
-
-[GeneratedDocument11]
-DocumentPath=Project Outputs for PSat Generic PSU\Gerber\PSU.GG1
-DItemRevisionGUID=
-
-[GeneratedDocument12]
-DocumentPath=Project Outputs for PSat Generic PSU\Gerber\PSU.GKO
-DItemRevisionGUID=
-
-[GeneratedDocument13]
-DocumentPath=Project Outputs for PSat Generic PSU\Gerber\PSU.GTL
-DItemRevisionGUID=
-
-[GeneratedDocument14]
-DocumentPath=Project Outputs for PSat Generic PSU\Gerber\PSU.GTO
-DItemRevisionGUID=
-
-[GeneratedDocument15]
-DocumentPath=Project Outputs for PSat Generic PSU\Gerber\PSU.GTP
-DItemRevisionGUID=
-
-[GeneratedDocument16]
-DocumentPath=Project Outputs for PSat Generic PSU\Gerber\PSU.GTS
-DItemRevisionGUID=
-
-[GeneratedDocument17]
-DocumentPath=Project Outputs for PSat Generic PSU\NC Drill\PSU.LDP
-DItemRevisionGUID=
-
-[GeneratedDocument18]
-DocumentPath=Project Outputs for PSat Generic PSU\Gerber\PSU.REP
-DItemRevisionGUID=
-
-[GeneratedDocument19]
-DocumentPath=Project Outputs for PSat Generic PSU\Gerber\PSU.RUL
-DItemRevisionGUID=
-
 [Parameter1]
-Name=
-Value=
-
-[Parameter2]
 Name=Version
 Value=2.0.1
 
