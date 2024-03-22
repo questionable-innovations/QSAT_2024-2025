@@ -547,6 +547,40 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=IIXXSXBJ
 
+[Document31]
+DocumentPath=Libraries\JellybeanComponents.PcbLib
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=
+
+[Document32]
+DocumentPath=Libraries\JellybeanComponents.SchLib
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=
+
 [ProjectVariant1]
 UniqueID=BF6EC73B-CFC9-4DB0-A82B-80AB52F5C562
 Description=USB-C
@@ -569,8 +603,12 @@ Variation3=Designator=R?|UniqueId=\QJSKMJGN|Kind=1|AlternatePart=
 ParamVariationCount=0
 
 [Parameter1]
+Name=
+Value=
+
+[Parameter2]
 Name=Version
-Value=2.0.2
+Value=2.0.3
 
 [Configuration1]
 Name=Sources
