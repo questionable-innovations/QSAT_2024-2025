@@ -1,5 +1,6 @@
 # Psat PSU PCB v2
 The PSU PCB provides 1.8V, 3.3V, 5V rails and a raw battery voltage rail. The various supply rails can be always on, or controlled by software (see Functionality). USB-C and micro-USB connectors are present to charge the battery using a standard USB wall charger.
+The supply rail voltages can be adjusted by changing the feedback resistor values. See the schematic for details.
 
 ## Functionality
 ### Controlling the Supply Rails
@@ -12,6 +13,7 @@ In the “OFF / SW control” mode, the supply defaults to off (pulled down by a
 *Note: If you configure S1 into the “ON” mode and have also connected the enable pin to a microcontroller, make sure to leave that GPIO pin as an input pin, as otherwise you will waste power through the 1.5k resistor.*
 
 ### USB charging
+The board is capable of charging a lithium-ion battery by connecting a USB charger.
 The two USB connectors (USB-C and micro-USB) are provided for convenience. DO NOT CHARGE USING BOTH CONNECTORS AT ONCE.
 The battery will charge up to 800mA (USB power supply willing). This rate can be decreased by changing the value of R6, according to the datasheet of the battery charger.
 
@@ -24,16 +26,18 @@ ABF is a connector that controls whether the battery is connected to the PSU and
 ## Connections
 Header H1:
 
- - 1V8 -  1.8V supply rail, capable of 2A output.
- - 3V3 -  3.3V supply rail, capable of 2A output.
- - 5V  -  5V supply rail, capable of 2A output.
+ - 1V8 -  1.8V step-down supply rail, capable of 2A output, battery not withstanding.
+ - 3V3 -  3.3V step-down supply rail, capable of 2A output, battery not withstanding. *
+ - 5V  -  5V step-up supply rail, capable of 2A output, battery not withstanding.
  - GND -  Common ground for all supply rails.
- - Vraw - Raw battery voltage. For a Li-ion battery this is between 4.2V and 3V.
- - 1V8_PG - Power good indicator for the 1.8V rail. Open-drain output. It is is pulled up to Vraw when the output voltage is within 20% of the regulation level, otherwise it is low.
- - 3V3_PG - Power good indicator for the 3.3V rail. Open-drain output. It is is pulled up to Vraw when the output voltage is within 20% of the regulation level, otherwise it is low.
- - EN_1V8 - When the equivalent S1 switch is set to "SW control", this pin is pulled down with a 1 Megohm resistor. It may be pulled up above 1.5V to enable the 1.8V supply. When the equivalent S1 switch is in the "ON" position this pin is shorted to Vraw.
- - EN_3V3 - When the equivalent S1 switch is set to "SW control", this pin is pulled down with a 1 Megohm resistor. It may be pulled up above 1.5V to enable the 3.3V supply. When the equivalent S1 switch is in the "ON" position this pin is shorted to Vraw.
- - EN_5V  - When the equivalent S1 switch is set to "SW control", this pin is pulled down with a 1 Megohm resistor. It may be pulled up above 1.2V to enable the 5V supply. When the equivalent S1 switch is in the "ON" position this pin is shorted to Vraw.
+ - Vraw - Raw battery voltage. For a Li-ion battery this is between ~4.2V and ~3V.
+ - 1V8_PG - Power good indicator for the 1.8V rail. Open-drain output: While the output voltage is more than 20% away from the regulation level this pin is pulled low, otherwise it is floating - you should attach this to a voltage source via a pullup resistor of your choosing.
+ - 3V3_PG - Power good indicator for the 3.3V rail. Open-drain output: While the output voltage is more than 20% away from the regulation level this pin is pulled low,  otherwise it is floating - you should attach this to a voltage source via a pullup resistor of your choosing.
+ - EN_1V8 - This pin may be pulled up above 1.5V to enable the 1.8V supply. The pin has a 1 Megohm pulldown resistor attached. When the equivalent S1 switch is in the "ON" position a 1.5k pullup resistor pulls this pin up to Vraw.
+ - EN_3V3 - This pin may be pulled up above 1.5V to enable the 3.3V supply. The pin has a 1 Megohm pulldown resistor attached. When the equivalent S1 switch is in the "ON" position a 1.5k pullup resistor pulls this pin up to Vraw.
+ - EN_5V - This pin may be pulled up above 1.2V to enable the 5V supply. The pin has a 1 Megohm pulldown resistor attached. When the equivalent S1 switch is in the "ON" position a 1.5k pullup resistor pulls this pin up to Vraw.
+
+ \* *Note: This voltage is only stepped-down from the battery voltage, so if that goes below 3.3V this supply rail will as well. This means that across a full battery discharge this rail is nominally between 3.3V - 3.0V.*
 
 ## PCB Stacking
 The PSat PSU is designed to be used in conjunction with either a single payload PCB (i.e. ‘2 PCB stack’) or in a stack of multiple PCBs (‘Multi-PCB stack’).
@@ -56,8 +60,6 @@ The simplest stack uses the female stacking headers for each layer, except for t
 
 ## Future changes
 Maybe add a resettable fuse between the two USB connector’s bus voltages?
-
-To check: The ‘power good’ indicators may need a pull-up resistor.
 
 Maybe add a polyfuse to battery and each rail’s outputs
 
