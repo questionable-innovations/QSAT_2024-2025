@@ -78,13 +78,17 @@ Configuration3_Item2=545046300E5446696C74657257726170706572000D46696C7465722E416
 Configuration3_Name3=General
 Configuration3_Item3=OpenExported=False|AddToProject=False|ForceFit=False|NotFitted=False|Database=False|DatabasePriority=False|IncludePCBData=False|IncludeVaultData=False|IncludeAlternatives=False|ShowExportOptions=True|TemplateFilename=|BatchMode=5|FormWidth=1200|FormHeight=656|SupplierProdQty=1|SupplierAutoQty=False|SupplierUseCachedPricing=False|SupplierCurrency=<none>
 Configuration3_Name4=GroupOrder
-Configuration3_Item4=Comment=True|Footprint=True
-Configuration3_Name5=SortOrder
-Configuration3_Item5=IsInLabBook=Up
-Configuration3_Name6=VisibleOrder
-Configuration3_Item6=Designator=120|Comment=120|Description=120|Quantity=75|Footprint=120|LibRef=173|IsInLabBook=47
-Configuration3_Name7=VisibleOrder_Flat
-Configuration3_Item7=Designator=120|Comment=120|Description=120|Quantity=75|Footprint=120|LibRef=120
+Configuration3_Item4=MF Part No.=True
+Configuration3_Name5=PCBDocument
+Configuration3_Item5=FileName=MCU.PcbDoc
+Configuration3_Name6=PCBDocument2
+Configuration3_Item6=FileName=[PCB Document 1]
+Configuration3_Name7=SortOrder
+Configuration3_Item7=Comment=Down
+Configuration3_Name8=VisibleOrder
+Configuration3_Item8=Designator=86|MF Part No.=71|Value=54|Quantity=39|Description=149|LibRef=114|Supplier 1=54|Supplier 1 Part No.=54|Supplier 2=54|Supplier 2 Part No.=53
+Configuration3_Name9=VisibleOrder_Flat
+Configuration3_Item9=Designator=120|Comment=120|Description=120|Quantity=75|Footprint=120|LibRef=120
 OutputType4=Schematic Print
 OutputName4=Schematic Prints
 OutputCategory4=Documentation
