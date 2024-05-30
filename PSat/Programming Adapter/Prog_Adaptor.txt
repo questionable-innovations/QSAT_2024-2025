@@ -1,0 +1,10 @@
+Board Information Report
+Filename     : C:\Users\rpor545\DocumentsNonSynced\APSS-Reference-PCBs\PSat\Programming Adapter\Prog_Adaptor.PcbDoc
+Date         : 30/05/2024
+Time         : 6:00:44 pm
+Time Elapsed : 00:00:00
+
+General
+    Board Size, 29.35mmx21mm
+    Components on board, 4
+count : 2

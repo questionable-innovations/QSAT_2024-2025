@@ -1,0 +1,10 @@
+Board Information Report
+Filename     : C:\Users\rpor545\DocumentsNonSynced\APSS-Reference-PCBs\Breadboard Adapters\QFN-16 3x3, DFN-8 2x2, DFN-16 4x2\PCB.PcbDoc
+Date         : 30/05/2024
+Time         : 6:01:53 pm
+Time Elapsed : 00:00:00
+
+General
+    Board Size, 13.462mmx23.622mm
+    Components on board, 5
+count : 2

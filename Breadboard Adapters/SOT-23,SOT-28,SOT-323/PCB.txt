@@ -1,0 +1,10 @@
+Board Information Report
+Filename     : C:\Users\rpor545\DocumentsNonSynced\APSS-Reference-PCBs\Breadboard Adapters\SOT-23,SOT-28,SOT-323\PCB.PcbDoc
+Date         : 30/05/2024
+Time         : 6:02:55 pm
+Time Elapsed : 00:00:00
+
+General
+    Board Size, 10.668mmx10.414mm
+    Components on board, 5
+count : 2
