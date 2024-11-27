@@ -132,7 +132,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
+DocumentUniqueId=EEGIQDHC
 
 [Document6]
 DocumentPath=Libraries\MSP430.SchLib
@@ -166,7 +166,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
+DocumentUniqueId=DEAGUHCG
 
 [Document8]
 DocumentPath=Libraries\SSQ-104-02-S-S\Imported SSQ-104-02-S-S.lia\SSQ-104-02-S-S.SchLib
@@ -217,7 +217,7 @@ ClassGenCCAutoRoomEnabled=1
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
+DocumentUniqueId=QADXCREO
 
 [Document11]
 DocumentPath=..\..\Shared Libraries\APSS Prototype Parts.SchLib
@@ -251,7 +251,7 @@ ClassGenCCAutoRoomEnabled=0
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
+DocumentUniqueId=CEPVHXXP
 
 [Document13]
 DocumentPath=..\..\Shared Libraries\APSS Generic Components.SchLib
@@ -336,7 +336,7 @@ ClassGenCCAutoRoomEnabled=0
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
+DocumentUniqueId=OPFIFSWM
 
 [Document18]
 DocumentPath=..\..\PSat\PSU\Libraries\EceParts.SchLib
@@ -353,7 +353,7 @@ ClassGenCCAutoRoomEnabled=0
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
+DocumentUniqueId=JMFTQHYJ
 
 [Document19]
 DocumentPath=Libraries\LORA127X-C1\LORA127X-C1.PcbLib
@@ -370,7 +370,7 @@ ClassGenCCAutoRoomEnabled=0
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
+DocumentUniqueId=LANPNGXB
 
 [Document20]
 DocumentPath=Libraries\LORA127X-C1\LORA127X-C1.SchLib
@@ -387,7 +387,7 @@ ClassGenCCAutoRoomEnabled=0
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
+DocumentUniqueId=VITDHXFU
 
 [Document21]
 DocumentPath=Libraries\CMT-8504-100-SMT-TR\CMT-8504-100-SMT-TR.SchLib
@@ -404,7 +404,7 @@ ClassGenCCAutoRoomEnabled=0
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
+DocumentUniqueId=WJVYOTHO
 
 [Document22]
 DocumentPath=Libraries\CMT-8504-100-SMT-TR\XDCR_CMT-8504-100-SMT-TR.PcbLib
@@ -421,7 +421,7 @@ ClassGenCCAutoRoomEnabled=0
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
-DocumentUniqueId=
+DocumentUniqueId=HJUXHIHW
 
 [Document23]
 DocumentPath=Libraries\SSQ-105-03-X-S\SSQ-105-03-S-S\SAMTEC_SSQ-105-03-S-S.PcbLib
@@ -455,7 +455,92 @@ ClassGenCCAutoRoomEnabled=0
 ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
+DocumentUniqueId=IIXXSXBJ
+
+[Document25]
+DocumentPath=Motherboard.SchDoc
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=0
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=VINOEROT
+
+[Document26]
+DocumentPath=..\PartLib\LSM6DSMTR\LSM6DSMTR.PcbLib
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=0
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=HBXNHHJN
+
+[Document27]
+DocumentPath=..\PartLib\LSM6DSMTR\LSM6DSMTR.SchLib
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=0
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=ZQLOZIVF
+
+[Document28]
+DocumentPath=Libraries\CD-PA1616D\CD-PA1616D.IntLib
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=0
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
 DocumentUniqueId=
+
+[Document29]
+DocumentPath=..\..\Shared Libraries\APSS Flight Parts.PcbLib
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=0
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=DESOJHMS
 
 [GeneratedDocument1]
 DocumentPath=Project Outputs for PSat MCU\Design Rule Check - MCU.html
