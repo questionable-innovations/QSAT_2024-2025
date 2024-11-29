@@ -546,6 +546,10 @@ DocumentUniqueId=DESOJHMS
 DocumentPath=Project Outputs for PSat MCU\Design Rule Check - MCU.html
 DItemRevisionGUID=
 
+[GeneratedDocument2]
+DocumentPath=Project Outputs for QSatMotherboard\Design Rule Check - Motherboard.html
+DItemRevisionGUID=
+
 [Parameter1]
 Name=version
 Value=2.0.4
