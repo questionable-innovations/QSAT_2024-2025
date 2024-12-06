@@ -1,10 +1,10 @@
 Board Information Report
-Filename     : C:\Users\rpor545\DocumentsNonSynced\APSS-Reference-PCBs\PSat\PSU\PSU.PcbDoc
-Date         : 30/05/2024
-Time         : 7:37:40 pm
+Filename     : Y:\GitRepos\APSS-Reference-PCBs\PSat\PSU\PSU.PcbDoc
+Date         : 6/12/2024
+Time         : 6:57:01 pm
 Time Elapsed : 00:00:00
 
 General
     Board Size, 56mmx56mm
-    Components on board, 49
+    Components on board, 50
 count : 2

@@ -20,8 +20,8 @@ The battery will charge up to 800mA (USB power supply willing). This rate can be
 ### Disable while charging
 The final S1 switch (labelled '*' on the PCB) is the 'supply disabled while charging' switch. It determines whether all the supply rails (including Vraw) are available while a USB cable is plugged in. The battery will of course charge faster if the load is disabled during charging. The BQ21040 battery charger IC states that it can also power loads during charging, so long as the charging time does not exceed 10 hours as a result, but this is not universally true for all charging ICs. When this switch is set to "ON" the load is disabled during charging. When it is set to "SW control" the supplies are enabled even while plugged in.
 
-### 'Attach Before Flight’ Connector
-ABF is a connector that controls whether the battery is connected to the PSU and stack. When the jumper is removed the entire stack has no power. When a jumper is placed across ABF (shorting the two pins) the battery is connected to the PSU and hence the stack. It is placed at a right-angle so that the jumper may be inserted prior to launch through a hole in the exterior PSat shell.
+### 'Remove Before Flight’ Connector
+RBF is a connector that controls whether the battery is connected to the PSU and stack. When the jumper is removed the entire stack has no power. When a jumper is placed across ABF (shorting the two pins) the battery is disconnected to the PSU and hence the stack. It is placed at a right-angle so that the jumper may be removed prior to launch through a hole in the exterior PSat shell.
 
 ## Connections
 Header H1:
