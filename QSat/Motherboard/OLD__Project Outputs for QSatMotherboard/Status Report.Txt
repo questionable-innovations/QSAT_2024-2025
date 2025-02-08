@@ -1,0 +1,14 @@
+Project Outputs Generation Report
+---------------------------------
+Start Output Generation At 9:54:13 pm On 4/12/2024
+
+Output: Generate pick and place files
+Type  : Pick Place
+From  : Variant [[No Variations]] of PCB Document [Motherboard.PcbDoc]
+   Generated File[Pick Place for Motherboard.txt]
+
+
+Files Generated   : 1
+Documents Printed : 0
+
+Finished Output Generation At 9:54:14 pm On 4/12/2024

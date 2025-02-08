@@ -1,0 +1,749 @@
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html">
+<style type="text/css">
+		h1, h2, h3, h4, h5, h6 {
+			font-family : segoe ui;
+			color : black;
+			background-color : #EDE7D9;
+			padding: 0.3em;
+		}
+
+		h1 {
+			font-size: 1.2em;
+		}		
+
+		h2 {
+			font-size: 1.2em;
+		}
+
+		body {
+			font-family : segoe ui;
+		}
+
+		td, th {
+			padding: 0.5em;
+			text-align : left;
+			width: 10em;
+		}
+		th {
+			background-color : #EEEEEE;
+
+		}
+		th.column1, td.column1 {
+			text-align: left;
+			width : auto;
+		}
+		table {
+			width : 100%;
+			font-size: 0.9em;
+		}
+
+		.DRC_summary_header {
+			padding-bottom : 0.1em;
+			border : 0px solid black;
+			width: 100%;
+			align: left;
+		}
+
+		.DRC_summary_header_col1,
+		.DRC_summary_header_col2, 
+		.DRC_summary_header_col3 {
+			color : black;
+			font-size:100%;
+			padding : 0em;
+			padding-top : 0.2em;
+			padding-bottom 0.2em;
+			border : 0px solid black;
+			vertical-align: top;
+			text-align: left;
+		}
+
+		.DRC_summary_header_col1 {
+			font-weight: bold;
+			width: 9em;
+		}
+
+		.DRC_summary_header_col2 {
+			width: 0.1em;
+		
+		}
+
+		.DRC_summary_header_col3 {
+			width : auto;
+		}
+
+		.header_holder {
+		    Width = 100%;
+		    border = 0px solid green;
+		    padding = 0;
+		}
+
+
+		.front_matter, .front_matter_column1, .front_matter_column2, .front_matter_column3
+		{
+			left : 0;
+			top : 0;
+			padding: 0em;
+			padding-top : 0.1em;
+			border : 0px solid black;
+			width : 100%;
+			vertical-align: top;
+			text-align: left;
+		}
+
+		.front_matter_column1 {
+			width : 8em;
+			font-weight: bold;
+		}
+
+		.front_matter_column2 {
+			width: 0.1em;
+		}
+
+		.front_matter_column3 {
+			width : auto;
+		}
+
+		.total_column1, .total_column {
+			font-weight : bold;
+		}
+		.total_column1 {
+			text-align : left;
+		}
+		.warning, .error {
+			color : red;
+			font-weight : bold;
+		}
+		tr.onmouseout_odd {
+			background-color : #white;
+		}
+		tr.onmouseout_even { 
+			background-color : #FAFAFA;
+		}
+		tr.onmouseover_odd, tr.onmouseover_even { 
+			background-color : #EEEEEE;
+		} 
+		a:link, a:visited, .q a:link,.q a:active,.q {
+			color: #21489e; 
+		}
+		a:link.callback, a:visited.callback { 
+			color: #21489e;
+		}
+		a:link.customize, a:visited.customize {
+			color: #C0C0C0;
+			position: absolute; 
+			right: 10px;
+		}	
+		p.contents_level1 {
+			font-weight : bold;
+			font-size : 110%;
+			margin : 0.5em;
+		}
+		p.contents_level2 {
+			position : relative;
+			left : 20px;
+			margin : 0.5em;
+		}
+	</style><script type="text/javascript">
+		function coordToMils(coord) {
+			var number = coord / 10000;
+			
+			if (number != number.toFixed(3))
+				number = number.toFixed(3);
+
+			return number + 'mil'
+		}
+
+		function coordToMM(coord) {
+			var number = 0.0254 * coord / 10000;
+			
+			if (number != number.toFixed(4))
+				number = number.toFixed(4);
+			
+			return number + 'mm'
+		}
+	
+		function convertCoord(coordNode, units) {
+			for (var i = 0; i < coordNode.childNodes.length; i++) {
+				coordNode.removeChild(coordNode.childNodes[i]);
+			}
+
+			var coord = coordNode.getAttribute('value');
+			if (coord != null) {
+				if (units == 'mm') {
+					textNode = document.createTextNode(coordToMM(coord));
+					coordNode.appendChild(textNode);
+				} else if (units == 'mil') {
+					textNode = document.createTextNode(coordToMils(coord));		
+					coordNode.appendChild(textNode);	
+				}
+			}
+		}
+	
+		function convertUnits(unitNode, units) {
+			for (var i = 0; i < unitNode.childNodes.length; i++) {
+				unitNode.removeChild(unitNode.childNodes[i]);		
+			}
+		
+			textNode = document.createTextNode(units); 
+			unitNode.appendChild(textNode);
+		}
+	
+		function changeUnits(radio_input, units) {
+			if (radio_input.checked) {
+			
+				var elements = document.getElementsByName('coordinate');
+				if (elements) {
+					for (var i = 0; i < elements.length; i++) {
+						convertCoord(elements[i], units);
+					}
+				}
+	
+				var elements = document.getElementsByName('units');
+				if (elements) {
+					for (var i = 0; i < elements.length; i++) {
+						convertUnits(elements[i], units);
+					}
+				}
+			}
+		}
+	</script><title>Design Rule Verification Report</title>
+</head>
+<body onload=""><img ALT="Altium" src="
+			file://C:\Users\Public\Documents\Altium\AD24\Templates\AD_logo.png
+		"><h1>Design Rule Verification Report</h1>
+<table class="header_holder">
+<td class="column1">
+<table class="front_matter">
+<tr class="front_matter">
+<td class="front_matter_column1">Date:</td>
+<td class="front_matter_column2"></td>
+<td class="front_matter_column3">4/12/2024</td>
+</tr>
+<tr class="front_matter">
+<td class="front_matter_column1">Time:</td>
+<td class="front_matter_column2"></td>
+<td class="front_matter_column3">7:53:55 pm</td>
+</tr>
+<tr class="front_matter">
+<td class="front_matter_column1">Elapsed Time:</td>
+<td class="front_matter_column2"></td>
+<td class="front_matter_column3">00:00:00</td>
+</tr>
+<tr class="front_matter">
+<td class="front_matter_column1">Filename:</td>
+<td class="front_matter_column2"></td>
+<td class="front_matter_column3"><a href="file:///C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc" class="file"><acronym title="C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc">C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc</acronym></a></td>
+</tr>
+</table>
+</td>
+<td class="column2">
+<table class="DRC_summary_header">
+<tr>
+<td class="DRC_summary_header_col1">Warnings:</td>
+<td class="DRC_summary_header_col2"></td>
+<td class="DRC_summary_header_col3" style="color : red">1</td></tr>
+<tr>
+<td class="DRC_summary_header_col1">Rule Violations:</td>
+<td class="DRC_summary_header_col2"></td>
+<td class="DRC_summary_header_col3" style="color : red">126</td></tr>
+</table>
+</td>
+</table><a name="IDFJFGTWIQAET2NTNUALXP5JXNZFP550L1MX2WXVEMOOWUTSGLIBTH"><h2>Summary</h2></a><table>
+<tr>
+<th class="column1">Warnings</th>
+<th class="column2">Count</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDRTLCTO5OFWD52BKKIGLKEJVJGY1MMTA3JTTQBD2UD4TBW4UDG4E">1 Net Tie failed verification</a></td>
+<td class="column2">1</td>
+</tr>
+<tr>
+<td style="font-weight : bold; text-align : right" class="column1">Total</td>
+<td style="font-weight : bold" class="column2">1</td>
+</tr>
+</table><br><table>
+<tr>
+<th class="column1">Rule Violations</th>
+<th class="column2">Count</th>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#ID0QTZABSA4UMUFKTAPHOCIEGQMG5ITVLIQYCP0I2JU14SDEWZBTO">Clearance Constraint (Gap=0.152mm) (All),(All)</a></td>
+<td class="column2">7</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDN2YXHFCWPHDJP43SLUSWPFNWTISIEX0BDFWDA4OO34O30I02ZE3C">Short-Circuit Constraint (Allowed=No) (All),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDHZGVFF1J4SMCFK030PAVX302DPPWONMXOPSOP4ESAA2TGFDCBATF">Un-Routed Net Constraint ( (All) )</a></td>
+<td class="column2">3</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDDLLHOJ5KY0PEOOJCGVEQLF2PVPQXXKW0DXLYGLPJI0YVV5LFHDOC">Modified Polygon (Allow modified: No), (Allow shelved: No)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#ID0D4AKY251KSNEMAU235ALVKSSDQR4N1ODGNQQUJD1WT5RNJRUSTC">Width Constraint (Min=0.15mm) (Max=25.4mm) (Preferred=0.3mm) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#ID1TNG4CUVWRGIGUZJLTMMAMEMEEJ5JT3OPZY3ZOI13DFLJAM3M1CD">Routing Topology Rule(Topology=Shortest) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDHNKCFPNGQJ00CCX3U5NJW1BF5BON1KIBXZ4TERNIX44FD34HRPBN">Power Plane Connect Rule(Relief Connect )(Expansion=0.508mm) (Conductor Width=0.254mm) (Air Gap=0.254mm) (Entries=4) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDDRH3TR2DRLLCNANJKNU4MALQZKKWMS53MSZQQPMXX2FWBQECUWLG">Minimum Annular Ring (Minimum=0.15mm) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDBG2QTWN03JEEPX5HWDG1AAVJQBMH4A14G1HVKRFO34JKOT0EZQ4J">Hole Size Constraint (Min=0.3mm) (Max=6.2mm) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDSN53X2YQOAZYBSLWZPL30NDZ3NHHDUDW2MRKBBLURCTUL4O1EJKP">Hole To Hole Clearance (Gap=0.254mm) (All),(All)</a></td>
+<td class="column2">1</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#ID4GD0AWLRAMBNNNE0RAJZSS32IILYNRBJT00L3XEHXYITB04OE5HL">Minimum Solder Mask Sliver (Gap=0.1mm) (All),(All)</a></td>
+<td class="column2">62</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDMS1IISKUVZOGCFPXVINRGGM4GBNZQO0CUOHQ0BFC40Q0ZWKSADKO">Silk To Solder Mask (Clearance=0.1mm) (IsPad),(All)</a></td>
+<td class="column2">18</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDSIZJON4QHIRT0ULZCVBKJYIXHLYGXSKNMFCTIB3015SPDRPXDN">Silk to Silk (Clearance=0.1mm) (All),(All)</a></td>
+<td class="column2">26</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDVFQFJQ4YK1ESHVLSHPMXHVUHECDHJ1CYUIZZHWHLYQS2UHOQ2WJD">Net Antennae (Tolerance=0mm) (All)</a></td>
+<td class="column2">9</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDYTDZGJOFL304LMNHM1OVERUNGE5AHPDMODVHN0P15ZVGGVALWOIJ">Height Constraint (Min=0mm) (Max=25.4mm) (Prefered=12.7mm) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr>
+<td style="font-weight : bold; text-align : right" class="column1">Total</td>
+<td style="font-weight : bold" class="column2">126</td>
+</tr>
+</table><br><a name="IDIZLV2VQU5VWBNZIUIWCZGM0ZROQDZHPURUC1TPIZ0KH14QYR3G3K"><h2>Warnings</h2></a><a name="IDRTLCTO5OFWD52BKKIGLKEJVJGY1MMTA3JTTQBD2UD4TBW4UDG4E"><table>
+<tr>
+<th style="text-align : left" colspan="1" class="warning">1 Net Tie failed verification</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=233.975mil|Location2.X=317.956mil|Location1.Y=2666.378mil|Location2.Y=2783.518mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=233.975mil|Location2.X=317.956mil|Location1.Y=2666.378mil|Location2.Y=2783.518mil|Absolute=True">SMT Small Component B11-Solder Jumper Normally Closed 0201 (6.223mm,68.326mm) on Top Layer</acronym></a>, SMT Small Component B11-Solder Jumper Normally Closed 0201 (6.223mm,68.326mm) on Top Layer, has isolated copper</td>
+</tr>
+</table></a><hr color="#EEEEEE"><a href="#top" style="font-size: 0.9em">Back to top</a><br><br><a name="ID0QTZABSA4UMUFKTAPHOCIEGQMG5ITVLIQYCP0I2JU14SDEWZBTO"><table>
+<tr>
+<th style="text-align : left" colspan="1" class="rule">Clearance Constraint (Gap=0.152mm) (All),(All)</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=735.903mil|Location2.X=743.153mil|Location1.Y=2399.544mil|Location2.Y=2406.794mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=735.903mil|Location2.X=743.153mil|Location1.Y=2399.544mil|Location2.Y=2406.794mil|Absolute=True">Clearance Constraint: (0.15mm &lt; 0.152mm) Between Pad U2-12(19.034mm,60.753mm) on Top Layer And Pad U2-13(18.534mm,60.753mm) on Top Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=716.218mil|Location2.X=723.468mil|Location1.Y=2399.544mil|Location2.Y=2406.794mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=716.218mil|Location2.X=723.468mil|Location1.Y=2399.544mil|Location2.Y=2406.794mil|Absolute=True">Clearance Constraint: (0.15mm &lt; 0.152mm) Between Pad U2-13(18.534mm,60.753mm) on Top Layer And Pad U2-14(18.034mm,60.753mm) on Top Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=668.974mil|Location2.X=676.224mil|Location1.Y=2332.615mil|Location2.Y=2339.865mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=668.974mil|Location2.X=676.224mil|Location1.Y=2332.615mil|Location2.Y=2339.865mil|Absolute=True">Clearance Constraint: (0.15mm &lt; 0.152mm) Between Pad U2-3(17.372mm,59.59mm) on Top Layer And Pad U2-4(17.372mm,59.091mm) on Top Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=716.218mil|Location2.X=723.468mil|Location1.Y=2327.694mil|Location2.Y=2334.944mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=716.218mil|Location2.X=723.468mil|Location1.Y=2327.694mil|Location2.Y=2334.944mil|Absolute=True">Clearance Constraint: (0.15mm &lt; 0.152mm) Between Pad U2-5(18.034mm,58.928mm) on Top Layer And Pad U2-6(18.534mm,58.928mm) on Top Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=760.508mil|Location2.X=767.758mil|Location1.Y=2332.615mil|Location2.Y=2339.865mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=760.508mil|Location2.X=767.758mil|Location1.Y=2332.615mil|Location2.Y=2339.865mil|Absolute=True">Clearance Constraint: (0.15mm &lt; 0.152mm) Between Pad U2-8(19.696mm,59.091mm) on Top Layer And Pad U2-9(19.696mm,59.59mm) on Top Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=641.375mil|Location2.X=648.625mil|Location1.Y=942.453mil|Location2.Y=949.703mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=641.375mil|Location2.X=648.625mil|Location1.Y=942.453mil|Location2.Y=949.703mil|Absolute=True">Clearance Constraint: (0.102mm &lt; 0.152mm) Between Track (10.565mm,23.779mm)(17.836mm,23.779mm) on Top Layer And Track (16.383mm,24.232mm)(16.408mm,24.257mm) on Top Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=946.359mil|Location2.X=953.609mil|Location1.Y=1202.201mil|Location2.Y=1209.451mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=946.359mil|Location2.X=953.609mil|Location1.Y=1202.201mil|Location2.Y=1209.451mil|Absolute=True">Clearance Constraint: (0.107mm &lt; 0.152mm) Between Track (23.673mm,30.628mm)(23.876mm,30.628mm) on Top Layer And Track (24.333mm,30.103mm)(24.333mm,30.899mm) on Top Layer </acronym></a><br></td>
+</tr>
+</table></a><hr color="#EEEEEE"><a href="#top" style="font-size: 0.9em">Back to top</a><br><br><a name="IDHZGVFF1J4SMCFK030PAVX302DPPWONMXOPSOP4ESAA2TGFDCBATF"><table>
+<tr>
+<th style="text-align : left" colspan="1" class="rule">Un-Routed Net Constraint ( (All) )</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1678.347mil|Location2.X=1770.749mil|Location1.Y=68.11mil|Location2.Y=1262.914mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1678.347mil|Location2.X=1770.749mil|Location1.Y=68.11mil|Location2.Y=1262.914mil|Absolute=True">Un-Routed Net Constraint: Net 3V3 Between Via (43.542mm,31.166mm) from Top Layer to Bottom Layer And Pad 1-2(44.852mm,1.905mm) on Top Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=474.172mil|Location2.X=678mil|Location1.Y=1085mil|Location2.Y=1175mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=474.172mil|Location2.X=678mil|Location1.Y=1085mil|Location2.Y=1175mil|Absolute=True">Un-Routed Net Constraint: Net NetR9_2 Between Pad SB3-2(14.584mm,30.099mm) on Top Layer And Track (14.681mm,27.305mm)(14.707mm,27.28mm) on Top Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=420mil|Location2.X=745mil|Location1.Y=897.126mil|Location2.Y=1054mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=420mil|Location2.X=745mil|Location1.Y=897.126mil|Location2.Y=1054mil|Absolute=True">Un-Routed Net Constraint: Net NetR9_2 Between Track (13.154mm,25.273mm)(13.208mm,25.327mm) on Top Layer And Track (16.383mm,24.232mm)(16.408mm,24.257mm) on Top Layer </acronym></a><br></td>
+</tr>
+</table></a><hr color="#EEEEEE"><a href="#top" style="font-size: 0.9em">Back to top</a><br><br><a name="IDSN53X2YQOAZYBSLWZPL30NDZ3NHHDUDW2MRKBBLURCTUL4O1EJKP"><table>
+<tr>
+<th style="text-align : left" colspan="1" class="rule">Hole To Hole Clearance (Gap=0.254mm) (All),(All)</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=234.159mil|Location2.X=241.825mil|Location1.Y=1182.355mil|Location2.Y=1190.021mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=234.159mil|Location2.X=241.825mil|Location1.Y=1182.355mil|Location2.Y=1190.021mil|Absolute=True">Hole To Hole Clearance Constraint: (Collision &lt; 0.254mm) Between Via (6.045mm,30.124mm) from Top Layer to Bottom Layer And Via (6.045mm,30.129mm) from Top Layer to Bottom Layer Pad/Via Touching Holes</acronym></a><br></td>
+</tr>
+</table></a><hr color="#EEEEEE"><a href="#top" style="font-size: 0.9em">Back to top</a><br><br><a name="ID4GD0AWLRAMBNNNE0RAJZSS32IILYNRBJT00L3XEHXYITB04OE5HL"><table>
+<tr>
+<th style="text-align : left" colspan="1" class="rule">Minimum Solder Mask Sliver (Gap=0.1mm) (All),(All)</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1449.927mil|Location2.X=1455.113mil|Location1.Y=241.851mil|Location2.Y=247.038mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1449.927mil|Location2.X=1455.113mil|Location1.Y=241.851mil|Location2.Y=247.038mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.076mm &lt; 0.1mm) Between Area Fill (35.944mm,6.597mm) (37.844mm,7.797mm) on Top Solder And Via (36.894mm,5.82mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.076mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1528.667mil|Location2.X=1533.853mil|Location1.Y=992.989mil|Location2.Y=998.176mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1528.667mil|Location2.X=1533.853mil|Location1.Y=992.989mil|Location2.Y=998.176mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.082mm &lt; 0.1mm) Between Area Fill (37.944mm,23.697mm) (39.844mm,24.897mm) on Top Solder And Via (38.894mm,25.679mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.082mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1085.969mil|Location2.X=1091.157mil|Location1.Y=2622.407mil|Location2.Y=2627.593mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1085.969mil|Location2.X=1091.157mil|Location1.Y=2622.407mil|Location2.Y=2627.593mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.025mm &lt; 0.1mm) Between Pad 50k-2(28.448mm,66.675mm) on Top Layer And Via (27.286mm,66.675mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.025mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1600.399mil|Location2.X=1605.585mil|Location1.Y=40.969mil|Location2.Y=46.157mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1600.399mil|Location2.X=1605.585mil|Location1.Y=40.969mil|Location2.Y=46.157mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.025mm &lt; 0.1mm) Between Pad C10-2(40.716mm,1.905mm) on Top Layer And Via (40.716mm,0.743mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.025mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1212.899mil|Location2.X=1218.085mil|Location1.Y=1235.969mil|Location2.Y=1241.157mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1212.899mil|Location2.X=1218.085mil|Location1.Y=1235.969mil|Location2.Y=1241.157mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.025mm &lt; 0.1mm) Between Pad C1-1(30.556mm,32.258mm) on Top Layer And Via (30.873mm,31.096mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.025mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1600.399mil|Location2.X=1605.585mil|Location1.Y=183.844mil|Location2.Y=189.03mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1600.399mil|Location2.X=1605.585mil|Location1.Y=183.844mil|Location2.Y=189.03mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.025mm &lt; 0.1mm) Between Pad C11-2(40.716mm,3.937mm) on Top Layer And Via (40.716mm,5.099mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.025mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1251.84mil|Location2.X=1257.027mil|Location1.Y=1235.871mil|Location2.Y=1241.058mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1251.84mil|Location2.X=1257.027mil|Location1.Y=1235.871mil|Location2.Y=1241.058mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.031mm &lt; 0.1mm) Between Pad C1-2(32.436mm,32.258mm) on Top Layer And Via (31.801mm,31.096mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.031mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=575.399mil|Location2.X=580.586mil|Location1.Y=35.969mil|Location2.Y=41.156mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=575.399mil|Location2.X=580.586mil|Location1.Y=35.969mil|Location2.Y=41.156mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.025mm &lt; 0.1mm) Between Pad C12-1(14.681mm,1.778mm) on Top Layer And Via (14.681mm,0.616mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.025mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=755.231mil|Location2.X=760.418mil|Location1.Y=800.97mil|Location2.Y=806.157mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=755.231mil|Location2.X=760.418mil|Location1.Y=800.97mil|Location2.Y=806.157mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.025mm &lt; 0.1mm) Between Pad C13-1(19.253mm,21.209mm) on Top Layer And Via (19.249mm,20.047mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.025mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1202.407mil|Location2.X=1207.593mil|Location1.Y=1383.843mil|Location2.Y=1389.031mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1202.407mil|Location2.X=1207.593mil|Location1.Y=1383.843mil|Location2.Y=1389.031mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.025mm &lt; 0.1mm) Between Pad C2-1(30.607mm,34.417mm) on Top Layer And Via (30.607mm,35.579mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.025mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1276.422mil|Location2.X=1281.61mil|Location1.Y=1383.843mil|Location2.Y=1389.031mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1276.422mil|Location2.X=1281.61mil|Location1.Y=1383.843mil|Location2.Y=1389.031mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.025mm &lt; 0.1mm) Between Pad C2-2(32.487mm,34.417mm) on Top Layer And Via (32.487mm,35.579mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.025mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=187.406mil|Location2.X=192.594mil|Location1.Y=2175.97mil|Location2.Y=2181.157mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=187.406mil|Location2.X=192.594mil|Location1.Y=2175.97mil|Location2.Y=2181.157mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.025mm &lt; 0.1mm) Between Pad C3-1(4.826mm,56.134mm) on Top Layer And Via (4.826mm,54.972mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.025mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=230.399mil|Location2.X=235.585mil|Location1.Y=1023.843mil|Location2.Y=1029.031mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=230.399mil|Location2.X=235.585mil|Location1.Y=1023.843mil|Location2.Y=1029.031mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.025mm &lt; 0.1mm) Between Pad C4-1(5.918mm,25.273mm) on Top Layer And Via (5.918mm,26.435mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.025mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=363.39mil|Location2.X=368.577mil|Location1.Y=1802.241mil|Location2.Y=1807.428mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=363.39mil|Location2.X=368.577mil|Location1.Y=1802.241mil|Location2.Y=1807.428mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.018mm &lt; 0.1mm) Between Pad C5-1(9.271mm,45.263mm) on Top Layer And Via (9.296mm,46.203mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.018mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=393.846mil|Location2.X=399.033mil|Location1.Y=1705.399mil|Location2.Y=1710.585mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=393.846mil|Location2.X=399.033mil|Location1.Y=1705.399mil|Location2.Y=1710.585mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.025mm &lt; 0.1mm) Between Pad C5-2(9.271mm,43.383mm) on Top Layer And Via (10.433mm,43.383mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.025mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=542.407mil|Location2.X=547.593mil|Location1.Y=2403.843mil|Location2.Y=2409.03mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=542.407mil|Location2.X=547.593mil|Location1.Y=2403.843mil|Location2.Y=2409.03mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.025mm &lt; 0.1mm) Between Pad CIMU-1(13.843mm,60.325mm) on Top Layer And Via (13.843mm,61.487mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.025mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=541.423mil|Location2.X=546.61mil|Location1.Y=2255.97mil|Location2.Y=2261.157mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=541.423mil|Location2.X=546.61mil|Location1.Y=2255.97mil|Location2.Y=2261.157mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.025mm &lt; 0.1mm) Between Pad CIMU1-1(13.818mm,58.166mm) on Top Layer And Via (13.818mm,57.004mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.025mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=467.406mil|Location2.X=472.594mil|Location1.Y=2255.97mil|Location2.Y=2261.157mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=467.406mil|Location2.X=472.594mil|Location1.Y=2255.97mil|Location2.Y=2261.157mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.025mm &lt; 0.1mm) Between Pad CIMU1-2(11.938mm,58.166mm) on Top Layer And Via (11.938mm,57.004mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.025mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=468.39mil|Location2.X=473.577mil|Location1.Y=2403.843mil|Location2.Y=2409.03mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=468.39mil|Location2.X=473.577mil|Location1.Y=2403.843mil|Location2.Y=2409.03mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.025mm &lt; 0.1mm) Between Pad CIMU-2(11.963mm,60.325mm) on Top Layer And Via (11.963mm,61.487mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.025mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=677.407mil|Location2.X=682.593mil|Location1.Y=2565.102mil|Location2.Y=2570.289mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=677.407mil|Location2.X=682.593mil|Location1.Y=2565.102mil|Location2.Y=2570.289mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.025mm &lt; 0.1mm) Between Pad D1-C(17.272mm,65.683mm) on Top Layer And Via (17.272mm,64.856mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.025mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=822.407mil|Location2.X=827.593mil|Location1.Y=2564.63mil|Location2.Y=2569.817mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=822.407mil|Location2.X=827.593mil|Location1.Y=2564.63mil|Location2.Y=2569.817mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.025mm &lt; 0.1mm) Between Pad D2-C(20.955mm,65.671mm) on Top Layer And Via (20.955mm,64.844mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.025mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=984.907mil|Location2.X=990.093mil|Location1.Y=2564.632mil|Location2.Y=2569.819mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=984.907mil|Location2.X=990.093mil|Location1.Y=2564.632mil|Location2.Y=2569.819mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.025mm &lt; 0.1mm) Between Pad D3-C(24.765mm,65.671mm) on Top Layer And Via (25.082mm,64.844mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.025mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1702.22mil|Location2.X=1709.63mil|Location1.Y=2767.806mil|Location2.Y=2774.597mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1702.22mil|Location2.X=1709.63mil|Location1.Y=2767.806mil|Location2.Y=2774.597mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.06mm &lt; 0.1mm) Between Pad J1b-2(43.765mm,69.49mm) on Top Layer And Via (43.15mm,70.717mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.06mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1720.438mil|Location2.X=1725.626mil|Location1.Y=2699.477mil|Location2.Y=2704.664mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1720.438mil|Location2.X=1725.626mil|Location1.Y=2699.477mil|Location2.Y=2704.664mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.013mm &lt; 0.1mm) Between Pad J1b-2(43.765mm,69.49mm) on Top Layer And Via (43.765mm,68.275mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.013mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1689.562mil|Location2.X=1696.863mil|Location1.Y=2766.396mil|Location2.Y=2773.119mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1689.562mil|Location2.X=1696.863mil|Location1.Y=2766.396mil|Location2.Y=2773.119mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.068mm &lt; 0.1mm) Between Pad J1b-3(42.515mm,69.49mm) on Top Layer And Via (43.15mm,70.717mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.068mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1474.374mil|Location2.X=1479.562mil|Location1.Y=2767.229mil|Location2.Y=2772.416mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1474.374mil|Location2.X=1479.562mil|Location1.Y=2767.229mil|Location2.Y=2772.416mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.025mm &lt; 0.1mm) Between Pad J1b-7(37.515mm,69.49mm) on Top Layer And Via (37.515mm,70.717mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.025mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1870.044mil|Location2.X=1875.232mil|Location1.Y=2785.85mil|Location2.Y=2791.037mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1870.044mil|Location2.X=1875.232mil|Location1.Y=2785.85mil|Location2.Y=2791.037mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.025mm &lt; 0.1mm) Between Pad J1b-MP1(47.565mm,72.39mm) on Top Layer And Via (47.565mm,70.463mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.025mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1325.556mil|Location2.X=1330.744mil|Location1.Y=2785.85mil|Location2.Y=2791.037mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1325.556mil|Location2.X=1330.744mil|Location1.Y=2785.85mil|Location2.Y=2791.037mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.025mm &lt; 0.1mm) Between Pad J1b-MP2(33.735mm,72.39mm) on Top Layer And Via (33.735mm,70.463mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.025mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=394.719mil|Location2.X=399.906mil|Location1.Y=1214.724mil|Location2.Y=1219.91mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=394.719mil|Location2.X=399.906mil|Location1.Y=1214.724mil|Location2.Y=1219.91mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.026mm &lt; 0.1mm) Between Pad OP1-2(9.962mm,31.684mm) on Top Layer And Via (10.092mm,30.556mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.026mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=440.795mil|Location2.X=445.981mil|Location1.Y=1214.729mil|Location2.Y=1219.917mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=440.795mil|Location2.X=445.981mil|Location1.Y=1214.729mil|Location2.Y=1219.917mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.025mm &lt; 0.1mm) Between Pad OP1-4(11.262mm,31.684mm) on Top Layer And Via (11.262mm,30.557mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.025mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=433.104mil|Location2.X=440.781mil|Location1.Y=1388.229mil|Location2.Y=1394.888mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=433.104mil|Location2.X=440.781mil|Location1.Y=1388.229mil|Location2.Y=1394.888mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.053mm &lt; 0.1mm) Between Pad OP1-5(11.262mm,36.134mm) on Top Layer And Via (10.945mm,35.007mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.053mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=423.06mil|Location2.X=430.632mil|Location1.Y=1389.655mil|Location2.Y=1396.422mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=423.06mil|Location2.X=430.632mil|Location1.Y=1389.655mil|Location2.Y=1396.422mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.058mm &lt; 0.1mm) Between Pad OP1-6(10.612mm,36.134mm) on Top Layer And Via (10.945mm,35.007mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.058mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1030.261mil|Location2.X=1035.448mil|Location1.Y=649.808mil|Location2.Y=654.995mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1030.261mil|Location2.X=1035.448mil|Location1.Y=649.808mil|Location2.Y=654.995mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.025mm &lt; 0.1mm) Between Pad Q1-2(25.511mm,16.571mm) on Top Layer And Via (26.598mm,16.571mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.025mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1070.261mil|Location2.X=1075.448mil|Location1.Y=874.808mil|Location2.Y=879.995mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1070.261mil|Location2.X=1075.448mil|Location1.Y=874.808mil|Location2.Y=879.995mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.025mm &lt; 0.1mm) Between Pad Q2-2(26.527mm,22.286mm) on Top Layer And Via (27.614mm,22.286mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.025mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1090.399mil|Location2.X=1095.585mil|Location1.Y=615.97mil|Location2.Y=621.157mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1090.399mil|Location2.X=1095.585mil|Location1.Y=615.97mil|Location2.Y=621.157mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.025mm &lt; 0.1mm) Between Pad R10-1(27.762mm,16.51mm) on Top Layer And Via (27.762mm,15.348mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.025mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=437.406mil|Location2.X=442.594mil|Location1.Y=1935.969mil|Location2.Y=1941.157mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=437.406mil|Location2.X=442.594mil|Location1.Y=1935.969mil|Location2.Y=1941.157mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.025mm &lt; 0.1mm) Between Pad R1-2(11.176mm,50.038mm) on Top Layer And Via (11.176mm,48.876mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.025mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=249.294mil|Location2.X=256.516mil|Location1.Y=1547.319mil|Location2.Y=1554.094mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=249.294mil|Location2.X=256.516mil|Location1.Y=1547.319mil|Location2.Y=1554.094mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.098mm &lt; 0.1mm) Between Pad R12-1(7.039mm,40.386mm) on Top Layer And Via (6.192mm,39.065mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.098mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=309.414mil|Location2.X=314.601mil|Location1.Y=1085.969mil|Location2.Y=1091.157mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=309.414mil|Location2.X=314.601mil|Location1.Y=1085.969mil|Location2.Y=1091.157mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.025mm &lt; 0.1mm) Between Pad R13-1(7.925mm,28.448mm) on Top Layer And Via (7.925mm,27.286mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.025mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=610.407mil|Location2.X=615.593mil|Location1.Y=1143.965mil|Location2.Y=1149.151mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=610.407mil|Location2.X=615.593mil|Location1.Y=1143.965mil|Location2.Y=1149.151mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.032mm &lt; 0.1mm) Between Pad R14-2(15.57mm,28.321mm) on Top Layer And Via (15.57mm,29.489mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.032mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=610.399mil|Location2.X=615.586mil|Location1.Y=1023.843mil|Location2.Y=1029.031mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=610.399mil|Location2.X=615.586mil|Location1.Y=1023.843mil|Location2.Y=1029.031mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.025mm &lt; 0.1mm) Between Pad R15-2(15.57mm,25.273mm) on Top Layer And Via (15.57mm,26.435mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.025mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1005.971mil|Location2.X=1011.159mil|Location1.Y=1114.415mil|Location2.Y=1119.601mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1005.971mil|Location2.X=1011.159mil|Location1.Y=1114.415mil|Location2.Y=1119.601mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.025mm &lt; 0.1mm) Between Pad R16-1(26.416mm,28.372mm) on Top Layer And Via (25.254mm,28.372mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.025mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1815.969mil|Location2.X=1821.157mil|Location1.Y=1222.407mil|Location2.Y=1227.593mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1815.969mil|Location2.X=1821.157mil|Location1.Y=1222.407mil|Location2.Y=1227.593mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.025mm &lt; 0.1mm) Between Pad R21-2(46.99mm,31.115mm) on Top Layer And Via (45.828mm,31.115mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.025mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1879.05mil|Location2.X=1886.096mil|Location1.Y=1199.054mil|Location2.Y=1206.001mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1879.05mil|Location2.X=1886.096mil|Location1.Y=1199.054mil|Location2.Y=1206.001mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.057mm &lt; 0.1mm) Between Pad R21-2(46.99mm,31.115mm) on Top Layer And Via (48.031mm,30.226mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.057mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1725.843mil|Location2.X=1731.031mil|Location1.Y=1150.407mil|Location2.Y=1155.593mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1725.843mil|Location2.X=1731.031mil|Location1.Y=1150.407mil|Location2.Y=1155.593mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.032mm &lt; 0.1mm) Between Pad R22-1(44.704mm,29.286mm) on Top Layer And Via (43.536mm,29.286mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.032mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1725.969mil|Location2.X=1731.157mil|Location1.Y=1224.415mil|Location2.Y=1229.601mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1725.969mil|Location2.X=1731.157mil|Location1.Y=1224.415mil|Location2.Y=1229.601mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.025mm &lt; 0.1mm) Between Pad R22-2(44.704mm,31.166mm) on Top Layer And Via (43.542mm,31.166mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.025mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=448.406mil|Location2.X=453.594mil|Location1.Y=35.843mil|Location2.Y=41.03mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=448.406mil|Location2.X=453.594mil|Location1.Y=35.843mil|Location2.Y=41.03mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.032mm &lt; 0.1mm) Between Pad R25-2(11.1mm,1.778mm) on Top Layer And Via (11.455mm,0.61mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.032mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1403.843mil|Location2.X=1409.031mil|Location1.Y=1052.899mil|Location2.Y=1058.085mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1403.843mil|Location2.X=1409.031mil|Location1.Y=1052.899mil|Location2.Y=1058.085mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.025mm &lt; 0.1mm) Between Pad R27-1(34.925mm,26.492mm) on Top Layer And Via (36.087mm,26.809mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.025mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=105.398mil|Location2.X=110.585mil|Location1.Y=2615.97mil|Location2.Y=2621.157mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=105.398mil|Location2.X=110.585mil|Location1.Y=2615.97mil|Location2.Y=2621.157mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.025mm &lt; 0.1mm) Between Pad R7-2(2.743mm,67.31mm) on Top Layer And Via (2.743mm,66.148mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.025mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=184.415mil|Location2.X=189.601mil|Location1.Y=2515.97mil|Location2.Y=2521.157mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=184.415mil|Location2.X=189.601mil|Location1.Y=2515.97mil|Location2.Y=2521.157mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.025mm &lt; 0.1mm) Between Pad R8-2(4.75mm,64.77mm) on Top Layer And Via (4.75mm,63.608mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.025mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1025.136mil|Location2.X=1032.812mil|Location1.Y=1814.975mil|Location2.Y=1821.724mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1025.136mil|Location2.X=1032.812mil|Location1.Y=1814.975mil|Location2.Y=1821.724mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.07mm &lt; 0.1mm) Between Pad U1-21(26.17mm,45.466mm) on Top Layer And Via (25.984mm,46.533mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.07mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=969.634mil|Location2.X=974.821mil|Location1.Y=1815.328mil|Location2.Y=1820.515mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=969.634mil|Location2.X=974.821mil|Location1.Y=1815.328mil|Location2.Y=1820.515mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.07mm &lt; 0.1mm) Between Pad U1-24(24.67mm,45.466mm) on Top Layer And Via (24.74mm,46.558mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.07mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=941.867mil|Location2.X=947.054mil|Location1.Y=1634.849mil|Location2.Y=1640.035mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=941.867mil|Location2.X=947.054mil|Location1.Y=1634.849mil|Location2.Y=1640.035mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.037mm &lt; 0.1mm) Between Pad U1-30(23.295mm,41.591mm) on Top Layer And Via (24.359mm,41.591mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.037mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=887.515mil|Location2.X=892.702mil|Location1.Y=1574.45mil|Location2.Y=1579.637mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=887.515mil|Location2.X=892.702mil|Location1.Y=1574.45mil|Location2.Y=1579.637mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.027mm &lt; 0.1mm) Between Pad U1-33(23.295mm,40.091mm) on Top Layer And Via (22.25mm,39.991mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.027mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1103.933mil|Location2.X=1111.614mil|Location1.Y=1490.072mil|Location2.Y=1496.819mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1103.933mil|Location2.X=1111.614mil|Location1.Y=1490.072mil|Location2.Y=1496.819mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.064mm &lt; 0.1mm) Between Pad U1-44(28.17mm,37.216mm) on Top Layer And Via (27.987mm,38.278mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.064mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1148.502mil|Location2.X=1156.178mil|Location1.Y=1488.616mil|Location2.Y=1495.276mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1148.502mil|Location2.X=1156.178mil|Location1.Y=1488.616mil|Location2.Y=1495.276mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.067mm &lt; 0.1mm) Between Pad U1-46(29.17mm,37.216mm) on Top Layer And Via (29.362mm,38.278mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.067mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1211.811mil|Location2.X=1216.998mil|Location1.Y=1592.986mil|Location2.Y=1598.173mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1211.811mil|Location2.X=1216.998mil|Location1.Y=1592.986mil|Location2.Y=1598.173mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.066mm &lt; 0.1mm) Between Pad U1-5(31.545mm,40.591mm) on Top Layer And Via (30.48mm,40.411mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.066mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1212.228mil|Location2.X=1217.415mil|Location1.Y=1634.849mil|Location2.Y=1640.035mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1212.228mil|Location2.X=1217.415mil|Location1.Y=1634.849mil|Location2.Y=1640.035mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.025mm &lt; 0.1mm) Between Pad U1-7(31.545mm,41.591mm) on Top Layer And Via (30.493mm,41.591mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.025mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1266.615mil|Location2.X=1273.27mil|Location1.Y=1632.337mil|Location2.Y=1640.038mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1266.615mil|Location2.X=1273.27mil|Location1.Y=1632.337mil|Location2.Y=1640.038mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.055mm &lt; 0.1mm) Between Pad U1-7(31.545mm,41.591mm) on Top Layer And Via (32.597mm,41.409mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.055mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=601.462mil|Location2.X=606.649mil|Location1.Y=274.355mil|Location2.Y=279.542mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=601.462mil|Location2.X=606.649mil|Location1.Y=274.355mil|Location2.Y=279.542mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.025mm &lt; 0.1mm) Between Pad U3-19(15.343mm,5.971mm) on Top Layer And Via (15.343mm,7.398mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.025mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=542.407mil|Location2.X=547.593mil|Location1.Y=820.536mil|Location2.Y=825.723mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=542.407mil|Location2.X=547.593mil|Location1.Y=820.536mil|Location2.Y=825.723mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.025mm &lt; 0.1mm) Between Pad U3-3(13.843mm,21.971mm) on Top Layer And Via (13.843mm,20.544mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.025mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=247.132mil|Location2.X=252.32mil|Location1.Y=904.277mil|Location2.Y=909.464mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=247.132mil|Location2.X=252.32mil|Location1.Y=904.277mil|Location2.Y=909.464mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.025mm &lt; 0.1mm) Between Pad U3-8(6.343mm,21.971mm) on Top Layer And Via (6.343mm,23.398mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.025mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=866.245mil|Location2.X=873.797mil|Location1.Y=1640.558mil|Location2.Y=1647.328mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=866.245mil|Location2.X=873.797mil|Location1.Y=1640.558mil|Location2.Y=1647.328mil|Absolute=True">Minimum Solder Mask Sliver Constraint: (0.058mm &lt; 0.1mm) Between Via (21.933mm,42.091mm) from Top Layer to Bottom Layer And Via (22.204mm,41.381mm) from Top Layer to Bottom Layer [Top Solder] Mask Sliver [0.058mm] / [Bottom Solder] Mask Sliver [0.058mm]</acronym></a><br></td>
+</tr>
+</table></a><hr color="#EEEEEE"><a href="#top" style="font-size: 0.9em">Back to top</a><br><br><a name="IDMS1IISKUVZOGCFPXVINRGGM4GBNZQO0CUOHQ0BFC40Q0ZWKSADKO"><table>
+<tr>
+<th style="text-align : left" colspan="1" class="rule">Silk To Solder Mask (Clearance=0.1mm) (IsPad),(All)</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=234.188mil|Location2.X=237.812mil|Location1.Y=1828.706mil|Location2.Y=1832.33mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=234.188mil|Location2.X=237.812mil|Location1.Y=1828.706mil|Location2.Y=1832.33mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.1mm) Between Pad B18-1(6.075mm,46.609mm) on Top Layer And Text "B17" (5.994mm,45.745mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=242.283mil|Location2.X=245.907mil|Location1.Y=1834.188mil|Location2.Y=1837.812mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=242.283mil|Location2.X=245.907mil|Location1.Y=1834.188mil|Location2.Y=1837.812mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.1mm) Between Pad B18-1(6.075mm,46.609mm) on Top Layer And Text "SB1" (5.994mm,46.634mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=253.866mil|Location2.X=257.491mil|Location1.Y=1823.786mil|Location2.Y=1827.411mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=253.866mil|Location2.X=257.491mil|Location1.Y=1823.786mil|Location2.Y=1827.411mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.1mm) Between Pad B18-2(6.625mm,46.609mm) on Top Layer And Text "B17" (5.994mm,45.745mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=253.866mil|Location2.X=257.491mil|Location1.Y=1844.027mil|Location2.Y=1847.652mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=253.866mil|Location2.X=257.491mil|Location1.Y=1844.027mil|Location2.Y=1847.652mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.1mm) Between Pad B18-2(6.625mm,46.609mm) on Top Layer And Text "SB1" (5.994mm,46.634mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=90.188mil|Location2.X=93.812mil|Location1.Y=2177.706mil|Location2.Y=2181.33mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=90.188mil|Location2.X=93.812mil|Location1.Y=2177.706mil|Location2.Y=2181.33mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.1mm) Between Pad C3-2(2.946mm,56.134mm) on Top Layer And Text "R5" (2.337mm,54.61mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=331.837mil|Location2.X=337.024mil|Location1.Y=1684.926mil|Location2.Y=1690.113mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=331.837mil|Location2.X=337.024mil|Location1.Y=1684.926mil|Location2.Y=1690.113mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (0.083mm &lt; 0.1mm) Between Pad C5-2(9.271mm,43.383mm) on Top Layer And Text "R12" (6.452mm,42.316mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0.083mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=520.983mil|Location2.X=524.607mil|Location1.Y=2387.706mil|Location2.Y=2391.33mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=520.983mil|Location2.X=524.607mil|Location1.Y=2387.706mil|Location2.Y=2391.33mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.1mm) Between Pad CIMU-1(13.843mm,60.325mm) on Top Layer And Text "CIMU1" (11.405mm,59.944mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=466.866mil|Location2.X=470.491mil|Location1.Y=2382.786mil|Location2.Y=2386.411mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=466.866mil|Location2.X=470.491mil|Location1.Y=2382.786mil|Location2.Y=2386.411mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.1mm) Between Pad CIMU-2(11.963mm,60.325mm) on Top Layer And Text "CIMU1" (11.405mm,59.944mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=433.509mil|Location2.X=437.134mil|Location1.Y=1942.201mil|Location2.Y=1945.826mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=433.509mil|Location2.X=437.134mil|Location1.Y=1942.201mil|Location2.Y=1945.826mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.1mm) Between Pad R1-2(11.176mm,50.038mm) on Top Layer And Text "SB4" (10.557mm,48.753mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=379.791mil|Location2.X=384.978mil|Location1.Y=1550.953mil|Location2.Y=1556.14mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=379.791mil|Location2.X=384.978mil|Location1.Y=1550.953mil|Location2.Y=1556.14mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (0.082mm &lt; 0.1mm) Between Pad R12-2(9.979mm,40.386mm) on Top Layer And Text "OP1" (9.338mm,38.542mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0.082mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=683.429mil|Location2.X=687.053mil|Location1.Y=962.625mil|Location2.Y=966.25mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=683.429mil|Location2.X=687.053mil|Location1.Y=962.625mil|Location2.Y=966.25mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.1mm) Between Pad R15-1(17.45mm,25.273mm) on Top Layer And Text "R23" (18.155mm,22.622mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=90.188mil|Location2.X=93.812mil|Location1.Y=2619.251mil|Location2.Y=2622.875mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=90.188mil|Location2.X=93.812mil|Location1.Y=2619.251mil|Location2.Y=2622.875mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.1mm) Between Pad R7-2(2.743mm,67.31mm) on Top Layer And Text "R8" (2.337mm,66.548mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=251.964mil|Location2.X=255.589mil|Location1.Y=1802.205mil|Location2.Y=1805.83mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=251.964mil|Location2.X=255.589mil|Location1.Y=1802.205mil|Location2.Y=1805.83mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.1mm) Between Pad SB1-1(6.625mm,45.593mm) on Top Layer And Text "B17" (5.994mm,45.745mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=234.188mil|Location2.X=237.812mil|Location1.Y=1800.077mil|Location2.Y=1803.702mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=234.188mil|Location2.X=237.812mil|Location1.Y=1800.077mil|Location2.Y=1803.702mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.1mm) Between Pad SB1-2(6.075mm,45.593mm) on Top Layer And Text "B17" (5.994mm,45.745mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=450.077mil|Location2.X=453.702mil|Location1.Y=1817.188mil|Location2.Y=1820.812mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=450.077mil|Location2.X=453.702mil|Location1.Y=1817.188mil|Location2.Y=1820.812mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.1mm) Between Pad SB4-1(11.303mm,46.313mm) on Top Layer And Text "SB20" (11.278mm,46.203mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=450.077mil|Location2.X=453.702mil|Location1.Y=1846.706mil|Location2.Y=1850.33mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=450.077mil|Location2.X=453.702mil|Location1.Y=1846.706mil|Location2.Y=1850.33mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.1mm) Between Pad SB4-2(11.303mm,46.863mm) on Top Layer And Text "SB20" (11.278mm,46.203mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=888.063mil|Location2.X=891.688mil|Location1.Y=1734.188mil|Location2.Y=1737.812mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=888.063mil|Location2.X=891.688mil|Location1.Y=1734.188mil|Location2.Y=1737.812mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.1mm) Between Pad U1-25(23.295mm,44.091mm) on Top Layer And Text "SB13" (20.853mm,44.094mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=683.429mil|Location2.X=687.053mil|Location1.Y=888.83mil|Location2.Y=892.455mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=683.429mil|Location2.X=687.053mil|Location1.Y=888.83mil|Location2.Y=892.455mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (Collision &lt; 0.1mm) Between Pad U3-1(16.843mm,21.971mm) on Top Layer And Text "R23" (18.155mm,22.622mm) on Top Overlay [Top Overlay] to [Top Solder] clearance [0mm]</acronym></a><br></td>
+</tr>
+</table></a><hr color="#EEEEEE"><a href="#top" style="font-size: 0.9em">Back to top</a><br><br><a name="IDSIZJON4QHIRT0ULZCVBKJYIXHLYGXSKNMFCTIB3015SPDRPXDN"><table>
+<tr>
+<th style="text-align : left" colspan="1" class="rule">Silk to Silk (Clearance=0.1mm) (All),(All)</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=281.545mil|Location2.X=285.17mil|Location1.Y=2742.188mil|Location2.Y=2745.812mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=281.545mil|Location2.X=285.17mil|Location1.Y=2742.188mil|Location2.Y=2745.812mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.1mm) Between Text "B11" (6.198mm,69.698mm) on Top Overlay And Text "SB11" (7.214mm,69.698mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=440.085mil|Location2.X=443.71mil|Location1.Y=2868.429mil|Location2.Y=2872.053mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=440.085mil|Location2.X=443.71mil|Location1.Y=2868.429mil|Location2.Y=2872.053mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.1mm) Between Text "B12" (9.35mm,72.904mm) on Top Overlay And Track (11.388mm,72.9mm)(11.388mm,73.15mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=234.188mil|Location2.X=237.812mil|Location1.Y=1828.706mil|Location2.Y=1832.33mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=234.188mil|Location2.X=237.812mil|Location1.Y=1828.706mil|Location2.Y=1832.33mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.1mm) Between Text "B17" (5.994mm,45.745mm) on Top Overlay And Text "SB1" (5.994mm,46.634mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=228.078mil|Location2.X=233.266mil|Location1.Y=1797.656mil|Location2.Y=1802.843mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=228.078mil|Location2.X=233.266mil|Location1.Y=1797.656mil|Location2.Y=1802.843mil|Absolute=True">Silk To Silk Clearance Constraint: (0.019mm &lt; 0.1mm) Between Text "B17" (5.994mm,45.745mm) on Top Overlay And Track (5.8mm,45.468mm)(5.8mm,45.718mm) on Top Overlay Silk Text to Silk Clearance [0.019mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=228.064mil|Location2.X=233.251mil|Location1.Y=1827.925mil|Location2.Y=1833.112mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=228.064mil|Location2.X=233.251mil|Location1.Y=1827.925mil|Location2.Y=1833.112mil|Absolute=True">Silk To Silk Clearance Constraint: (0.017mm &lt; 0.1mm) Between Text "B17" (5.994mm,45.745mm) on Top Overlay And Track (5.8mm,46.484mm)(5.8mm,46.734mm) on Top Overlay Silk Text to Silk Clearance [0.017mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=269.842mil|Location2.X=273.466mil|Location1.Y=1799.188mil|Location2.Y=1802.812mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=269.842mil|Location2.X=273.466mil|Location1.Y=1799.188mil|Location2.Y=1802.812mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.1mm) Between Text "B17" (5.994mm,45.745mm) on Top Overlay And Track (6.9mm,45.468mm)(6.9mm,45.718mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=268.625mil|Location2.X=272.25mil|Location1.Y=1828.706mil|Location2.Y=1832.33mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=268.625mil|Location2.X=272.25mil|Location1.Y=1828.706mil|Location2.Y=1832.33mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.1mm) Between Text "B17" (5.994mm,45.745mm) on Top Overlay And Track (6.9mm,46.484mm)(6.9mm,46.734mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=248.166mil|Location2.X=253.352mil|Location1.Y=1868.166mil|Location2.Y=1873.352mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=248.166mil|Location2.X=253.352mil|Location1.Y=1868.166mil|Location2.Y=1873.352mil|Absolute=True">Silk To Silk Clearance Constraint: (0.012mm &lt; 0.1mm) Between Text "B18" (5.994mm,47.65mm) on Top Overlay And Text "SB1" (5.994mm,46.634mm) on Top Overlay Silk Text to Silk Clearance [0.012mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=139.385mil|Location2.X=143.009mil|Location1.Y=2177.706mil|Location2.Y=2181.33mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=139.385mil|Location2.X=143.009mil|Location1.Y=2177.706mil|Location2.Y=2181.33mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.1mm) Between Text "R5" (2.337mm,54.61mm) on Top Overlay And Track (3.632mm,55.414mm)(4.14mm,55.414mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=139.385mil|Location2.X=143.009mil|Location1.Y=2623.107mil|Location2.Y=2626.732mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=139.385mil|Location2.X=143.009mil|Location1.Y=2623.107mil|Location2.Y=2626.732mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.1mm) Between Text "R8" (2.337mm,66.548mm) on Top Overlay And Track (3.583mm,66.59mm)(3.783mm,66.59mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=433.589mil|Location2.X=437.214mil|Location1.Y=952.947mil|Location2.Y=956.571mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=433.589mil|Location2.X=437.214mil|Location1.Y=952.947mil|Location2.Y=956.571mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.1mm) Between Text "R9" (11.059mm,23.501mm) on Top Overlay And Track (11.104mm,24.393mm)(12.264mm,24.393mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=228.076mil|Location2.X=233.263mil|Location1.Y=1837.631mil|Location2.Y=1842.818mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=228.076mil|Location2.X=233.263mil|Location1.Y=1837.631mil|Location2.Y=1842.818mil|Absolute=True">Silk To Silk Clearance Constraint: (0.019mm &lt; 0.1mm) Between Text "SB1" (5.994mm,46.634mm) on Top Overlay And Track (5.8mm,46.484mm)(5.8mm,46.734mm) on Top Overlay Silk Text to Silk Clearance [0.019mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=263.706mil|Location2.X=267.33mil|Location1.Y=1834.188mil|Location2.Y=1837.812mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=263.706mil|Location2.X=267.33mil|Location1.Y=1834.188mil|Location2.Y=1837.812mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.1mm) Between Text "SB1" (5.994mm,46.634mm) on Top Overlay And Track (6.9mm,46.484mm)(6.9mm,46.734mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=591.535mil|Location2.X=599.199mil|Location1.Y=2866.916mil|Location2.Y=2873.667mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=591.535mil|Location2.X=599.199mil|Location1.Y=2866.916mil|Location2.Y=2873.667mil|Absolute=True">Silk To Silk Clearance Constraint: (0.053mm &lt; 0.1mm) Between Text "SB10" (13.293mm,73.031mm) on Top Overlay And Track (15.115mm,72.813mm)(15.365mm,72.813mm) on Top Overlay Silk Text to Silk Clearance [0.053mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1653.75mil|Location2.X=1657.375mil|Location1.Y=1097.947mil|Location2.Y=1101.571mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1653.75mil|Location2.X=1657.375mil|Location1.Y=1097.947mil|Location2.Y=1101.571mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.1mm) Between Text "SB18" (39.582mm,27.184mm) on Top Overlay And Text "SB5" (41.926mm,27.184mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1613.557mil|Location2.X=1620.728mil|Location1.Y=1064.226mil|Location2.Y=1071.041mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1613.557mil|Location2.X=1620.728mil|Location1.Y=1064.226mil|Location2.Y=1071.041mil|Absolute=True">Silk To Silk Clearance Constraint: (0.01mm &lt; 0.1mm) Between Text "SB18" (39.582mm,27.184mm) on Top Overlay And Track (40.769mm,27.093mm)(41.019mm,27.093mm) on Top Overlay Silk Text to Silk Clearance [0.01mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=447.107mil|Location2.X=450.732mil|Location1.Y=1817.188mil|Location2.Y=1820.812mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=447.107mil|Location2.X=450.732mil|Location1.Y=1817.188mil|Location2.Y=1820.812mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.1mm) Between Text "SB20" (11.278mm,46.203mm) on Top Overlay And Track (11.178mm,46.038mm)(11.428mm,46.038mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=446.326mil|Location2.X=451.513mil|Location1.Y=1851.095mil|Location2.Y=1856.282mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=446.326mil|Location2.X=451.513mil|Location1.Y=1851.095mil|Location2.Y=1856.282mil|Absolute=True">Silk To Silk Clearance Constraint: (0.009mm &lt; 0.1mm) Between Text "SB20" (11.278mm,46.203mm) on Top Overlay And Track (11.178mm,47.138mm)(11.428mm,47.138mm) on Top Overlay Silk Text to Silk Clearance [0.009mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=535.662mil|Location2.X=539.286mil|Location1.Y=1846.706mil|Location2.Y=1850.33mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=535.662mil|Location2.X=539.286mil|Location1.Y=1846.706mil|Location2.Y=1850.33mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.1mm) Between Text "SB20" (11.278mm,46.203mm) on Top Overlay And Track (13.813mm,33.058mm)(13.813mm,54.496mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=407.443mil|Location2.X=412.63mil|Location1.Y=1939.059mil|Location2.Y=1944.245mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=407.443mil|Location2.X=412.63mil|Location1.Y=1939.059mil|Location2.Y=1944.245mil|Absolute=True">Silk To Silk Clearance Constraint: (0.031mm &lt; 0.1mm) Between Text "SB4" (10.557mm,48.753mm) on Top Overlay And Track (10.136mm,49.318mm)(10.336mm,49.318mm) on Top Overlay Silk Text to Silk Clearance [0.031mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1727.545mil|Location2.X=1731.17mil|Location1.Y=1097.947mil|Location2.Y=1101.571mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1727.545mil|Location2.X=1731.17mil|Location1.Y=1097.947mil|Location2.Y=1101.571mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.1mm) Between Text "SB5" (41.926mm,27.184mm) on Top Overlay And Text "SB6" (43.831mm,27.184mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1692.326mil|Location2.X=1697.513mil|Location1.Y=1065.44mil|Location2.Y=1070.627mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1692.326mil|Location2.X=1697.513mil|Location1.Y=1065.44mil|Location2.Y=1070.627mil|Absolute=True">Silk To Silk Clearance Constraint: (0.012mm &lt; 0.1mm) Between Text "SB5" (41.926mm,27.184mm) on Top Overlay And Track (42.801mm,27.072mm)(43.051mm,27.072mm) on Top Overlay Silk Text to Silk Clearance [0.012mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1802.545mil|Location2.X=1806.17mil|Location1.Y=1073.348mil|Location2.Y=1076.973mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1802.545mil|Location2.X=1806.17mil|Location1.Y=1073.348mil|Location2.Y=1076.973mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.1mm) Between Text "SB6" (43.831mm,27.184mm) on Top Overlay And Text "SB7" (45.863mm,27.184mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1768.107mil|Location2.X=1771.732mil|Location1.Y=1068.429mil|Location2.Y=1072.053mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1768.107mil|Location2.X=1771.732mil|Location1.Y=1068.429mil|Location2.Y=1072.053mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.1mm) Between Text "SB6" (43.831mm,27.184mm) on Top Overlay And Track (44.706mm,27.093mm)(44.956mm,27.093mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1848.107mil|Location2.X=1851.732mil|Location1.Y=1068.429mil|Location2.Y=1072.053mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1848.107mil|Location2.X=1851.732mil|Location1.Y=1068.429mil|Location2.Y=1072.053mil|Absolute=True">Silk To Silk Clearance Constraint: (Collision &lt; 0.1mm) Between Text "SB7" (45.863mm,27.184mm) on Top Overlay And Track (46.738mm,27.093mm)(46.988mm,27.093mm) on Top Overlay Silk Text to Silk Clearance [0mm]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=977.648mil|Location2.X=982.835mil|Location1.Y=2055.786mil|Location2.Y=2060.973mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=977.648mil|Location2.X=982.835mil|Location1.Y=2055.786mil|Location2.Y=2060.973mil|Absolute=True">Silk To Silk Clearance Constraint: (0.095mm &lt; 0.1mm) Between Text "T5" (24.714mm,51.359mm) on Top Overlay And Text "T6" (24.648mm,52.457mm) on Top Overlay Silk Text to Silk Clearance [0.095mm]</acronym></a><br></td>
+</tr>
+</table></a><hr color="#EEEEEE"><a href="#top" style="font-size: 0.9em">Back to top</a><br><br><a name="IDVFQFJQ4YK1ESHVLSHPMXHVUHECDHJ1CYUIZZHWHLYQS2UHOQ2WJD"><table>
+<tr>
+<th style="text-align : left" colspan="1" class="rule">Net Antennae (Tolerance=0mm) (All)</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=438.547mil|Location2.X=457.679mil|Location1.Y=1836.579mil|Location2.Y=1863.429mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=438.547mil|Location2.X=457.679mil|Location1.Y=1836.579mil|Location2.Y=1863.429mil|Absolute=True">Net Antennae: Track (11.303mm,46.363mm)(11.303mm,46.813mm) on Top Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=472.405mil|Location2.X=491.537mil|Location1.Y=2868.547mil|Location2.Y=2895.397mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=472.405mil|Location2.X=491.537mil|Location1.Y=2868.547mil|Location2.Y=2895.397mil|Absolute=True">Net Antennae: Track (11.713mm,73.025mm)(12.163mm,73.025mm) on Top Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=569.687mil|Location2.X=588.819mil|Location1.Y=1178.547mil|Location2.Y=1205.397mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=569.687mil|Location2.X=588.819mil|Location1.Y=1178.547mil|Location2.Y=1205.397mil|Absolute=True">Net Antennae: Track (14.634mm,30.099mm)(15.084mm,30.099mm) on Top Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=569.595mil|Location2.X=595.154mil|Location1.Y=1064.594mil|Location2.Y=1102.045mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=569.595mil|Location2.X=595.154mil|Location1.Y=1064.594mil|Location2.Y=1102.045mil|Absolute=True">Net Antennae: Track (14.681mm,27.305mm)(14.707mm,27.28mm) on Top Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=568.595mil|Location2.X=594.154mil|Location1.Y=1065.594mil|Location2.Y=1103.045mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=568.595mil|Location2.X=594.154mil|Location1.Y=1065.594mil|Location2.Y=1103.045mil|Absolute=True">Net Antennae: Track (14.681mm,27.305mm)(14.707mm,27.28mm) on Top Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=636.595mil|Location2.X=662.154mil|Location1.Y=945.595mil|Location2.Y=983.045mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=636.595mil|Location2.X=662.154mil|Location1.Y=945.595mil|Location2.Y=983.045mil|Absolute=True">Net Antennae: Track (16.383mm,24.232mm)(16.408mm,24.257mm) on Top Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=635.595mil|Location2.X=661.154mil|Location1.Y=944.595mil|Location2.Y=982.045mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=635.595mil|Location2.X=661.154mil|Location1.Y=944.595mil|Location2.Y=982.045mil|Absolute=True">Net Antennae: Track (16.383mm,24.232mm)(16.408mm,24.257mm) on Top Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=933.547mil|Location2.X=952.679mil|Location1.Y=1197.405mil|Location2.Y=1224.255mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=933.547mil|Location2.X=952.679mil|Location1.Y=1197.405mil|Location2.Y=1224.255mil|Absolute=True">Net Antennae: Track (23.876mm,30.128mm)(23.876mm,30.578mm) on Top Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=234.689mil|Location2.X=253.821mil|Location1.Y=1788.547mil|Location2.Y=1815.397mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Users\jasper\Documents\Projects\APSS-Reference-PCBs\QSat\Motherboard\Motherboard.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=234.689mil|Location2.X=253.821mil|Location1.Y=1788.547mil|Location2.Y=1815.397mil|Absolute=True">Net Antennae: Track (6.125mm,45.593mm)(6.575mm,45.593mm) on Top Layer </acronym></a><br></td>
+</tr>
+</table></a><hr color="#EEEEEE"><a href="#top" style="font-size: 0.9em">Back to top</a><br><br></body>
+</html>
