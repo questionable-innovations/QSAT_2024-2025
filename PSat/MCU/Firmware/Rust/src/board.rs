@@ -1,8 +1,9 @@
 // An example board support package for a stack using the MCU and Beacon boards.
 
 #![allow(dead_code)]
+use embedded_lora_rfm95::rfm95;
 use msp430::critical_section;
-use msp430fr2355::{E_USCI_A1, E_USCI_B0, E_USCI_B1, P2, P4, P5};
+use msp430fr2355::{E_USCI_A1, E_USCI_B0, P2, P4, P5};
 use msp430fr2x5x_hal::{
     adc::{Adc, AdcConfig, ClockDivider, Predivider, Resolution, SampleTime, SamplingRate}, 
     clock::{Clock, ClockConfig, DcoclkFreqSel, MclkDiv, SmclkDiv}, 
@@ -10,11 +11,11 @@ use msp430fr2x5x_hal::{
     gpio::{Alternate3, Batch, Floating, Input, Output, Pin, Pin0, Pin1, Pin2, Pin3, Pin4, PinNum, PortNum}, 
     i2c::{GlitchFilter, I2CBusConfig, I2cBus}, pmm::Pmm, 
     serial::{BitCount, BitOrder, Loopback, Parity, Rx, SerialConfig, StopBits, Tx}, 
-    spi::{SpiBus, SpiBusConfig}, 
+    spi::SpiBusConfig, 
     watchdog::Wdt
 };
 use embedded_hal::digital::v2::OutputPin;
-use crate::println;
+use crate::{lora::{self, RFM95}, println};
 
 /// Top-level object representing the board.
 pub struct Board {
@@ -24,9 +25,8 @@ pub struct Board {
     pub blue_led:  BlueLED,
     pub gps_uart:   (Tx<E_USCI_A1>, Rx<E_USCI_A1>),
     pub i2c: I2cBus<E_USCI_B0>,
-    pub spi: SpiBus<E_USCI_B1>,
     pub adc: Adc,
-    pub lora_cs: LoraChipSel, 
+    pub lora_radio: RFM95,
     pub lora_irq: LoraIrq,
     pub gps_en: GpsEn,
     pub half_vbat: HalfVbat,
@@ -35,6 +35,33 @@ pub struct Board {
 impl Board {
     pub fn battery_voltage_mv(&mut self) -> u16 {
         self.adc.read_voltage_mv(&mut self.half_vbat, 3300).unwrap() * 2
+    }
+    pub fn lora_blocking_transmit(&mut self, data: &[u8]) {
+        self.lora_radio.start_tx(data).unwrap();
+        loop {
+            match self.lora_radio.complete_tx(){
+                Ok(None) => continue,   // Still sending
+                Ok(_) => return,        // Sending complete
+                Err(e) => panic!("{e}"),
+            }
+        }
+    }
+    pub fn lora_blocking_recieve<'a>(&mut self, buf: &'a mut [u8; rfm95::RFM95_FIFO_SIZE]) -> &'a [u8] {
+        let size;
+        'outer: loop {
+            let max_timeout = self.lora_radio.rx_timeout_max().unwrap();
+            self.lora_radio.start_rx(max_timeout).unwrap();
+            
+            'inner: loop {
+                match self.lora_radio.complete_rx(buf) {
+                    Ok(Some(n)) => {size = n; break 'outer;},
+                    Ok(None) => continue,
+                    Err("RX timeout") => break 'inner,
+                    Err(e) => panic!("{e}"),
+                };
+            };
+        }
+        &buf[0..size]
     }
 }
 
@@ -69,13 +96,6 @@ pub fn configure() -> Board {
         .smclk_on(SmclkDiv::_1)
         .freeze(&mut fram);
 
-    // LoRa radio
-    let mut lora_reset = port5.pin4.to_output(); // Not actually connected...
-    let mut lora_cs = port4.pin4.to_output();
-    lora_reset.set_high().ok();
-    lora_cs.set_high().ok();
-    let lora_irq = port5.pin3;
-
     // SPI, used by the LoRa radio
     let miso_pin = port4.pin7.to_alternate1();
     let mosi_pin = port4.pin6.to_alternate1();
@@ -83,6 +103,14 @@ pub fn configure() -> Board {
     let spi = SpiBusConfig::new(regs.E_USCI_B1, embedded_hal::spi::MODE_0, true)
         .use_smclk(&smclk, 32)
         .configure_with_software_cs(miso_pin, mosi_pin, sclk_pin);
+
+    // LoRa radio
+    let mut lora_reset = port5.pin2.to_output(); // Not actually connected...
+    let mut lora_cs = port4.pin4.to_output();
+    lora_reset.set_high().ok();
+    lora_cs.set_high().ok();
+    let lora_irq = port5.pin3;
+    let lora_radio = lora::prepare_radio(spi, lora_cs, lora_reset, delay);
 
     // GPS UART
     let gps_tx_pin = port4.pin3.to_alternate1();
@@ -141,7 +169,7 @@ pub fn configure() -> Board {
         .use_modclk()
         .configure(regs.ADC);
 
-    Board {delay, red_led, green_led, blue_led, gps_uart: (gps_tx, gps_rx), spi, lora_cs, i2c, adc, gps_en, lora_irq, half_vbat}
+    Board {delay, red_led, green_led, blue_led, gps_uart: (gps_tx, gps_rx), lora_radio, i2c, adc, gps_en, lora_irq, half_vbat}
 }
 /// Pin 2.0
 pub type RedLED    = Led<P2, Pin0>;

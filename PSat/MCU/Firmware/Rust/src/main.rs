@@ -9,6 +9,8 @@ use msp430fr2x5x_hal::hal::blocking::delay::DelayMs;
 mod board;
 mod serial;
 mod panic_handler;
+mod lora;
+mod gps;
 
 // Internal imports
 use board::Board;
