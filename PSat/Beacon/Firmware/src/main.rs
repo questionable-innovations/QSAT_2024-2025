@@ -6,12 +6,12 @@ use embedded_hal_compat::{eh1_0::delay::DelayNs, ForwardCompat};
 use embedded_lora_rfm95::{lora::types::{Bandwidth, CodingRate, CrcMode, HeaderMode, Polarity, PreambleLength, SpreadingFactor, SyncWord}, rfm95::{Rfm95Driver, RFM95_FIFO_SIZE}};
 use msp430::critical_section;
 use msp430_rt::entry;
-use msp430fr2355::{E_USCI_A1, P2};
+use msp430fr2355::{E_USCI_A0, E_USCI_A1, P2};
 use msp430fr2x5x_hal::{
     clock::{ClockConfig, DcoclkFreqSel, MclkDiv, SmclkDiv}, delay::Delay, fram::Fram, gpio::{Batch, Output, Pin, Pin0, Pin1, Pin2}, hal::blocking::delay::DelayMs, pmm::Pmm, serial::SerialConfig, spi::SpiBusConfig, watchdog::Wdt
 };
 
-use core::{cell::RefCell, panic::PanicInfo};
+use core::{cell::RefCell, panic::PanicInfo, str};
 #[panic_handler]
 fn panic_handler(panic_info: &PanicInfo) -> ! {
     msp430::interrupt::disable();
@@ -55,6 +55,7 @@ fn main() -> ! {
     blue_led.set_high().ok();
     green_led.set_high().ok();
 
+    let port1 = Batch::new(regs.P1).split(&pmm);
     let port4 = Batch::new(regs.P4).split(&pmm);
     let port5 = Batch::new(regs.P5).split(&pmm);
 
@@ -66,7 +67,7 @@ fn main() -> ! {
     let mut cs = port4.pin4.to_output();
     cs.set_high().ok();
 
-    let tx_pin = port4.pin3.to_alternate1();
+    let tx_pin = port1.pin7.to_alternate1();
 
     // Configure clocks to get accurate delay timing
     let mut fram = Fram::new(regs.FRCTL);
@@ -79,7 +80,7 @@ fn main() -> ! {
         .use_smclk(&smclk, 32)
         .configure_with_software_cs(miso, mosi, sclk);
 
-    let serial = SerialConfig::new(regs.E_USCI_A1, 
+    let serial = SerialConfig::new(regs.E_USCI_A0, 
         msp430fr2x5x_hal::serial::BitOrder::LsbFirst, 
         msp430fr2x5x_hal::serial::BitCount::EightBits, 
         msp430fr2x5x_hal::serial::StopBits::OneStopBit, 
@@ -88,8 +89,13 @@ fn main() -> ! {
         9600)
         .use_smclk(&smclk)
         .tx_only(tx_pin);
-    use core::fmt::Write;
-    let mut serial = MySerial(serial);
+
+    critical_section::with(|cs| {
+        SERIAL.replace(cs, Some(MySerial(serial)));
+    });
+    //use core::fmt::Write;
+    //let mut serial = MySerial(serial);
+    println!("Serial init");
 
     lora_reset.set_low().ok();
     delay.delay_ms(1);
@@ -97,7 +103,7 @@ fn main() -> ! {
     delay.delay_ms(6);
 
     let mut rfm95 = Rfm95Driver::new(spi.forward(), cs.forward(), lora_reset.forward(), MyDelay(delay)).unwrap();
-    writeln!(serial, "RFM95 config success!").ok();
+    println!("RFM95 config success!");
 
     delay.delay_ms(1000);
 
@@ -109,38 +115,47 @@ fn main() -> ! {
         .set_header_mode(HeaderMode::Explicit)
         .set_polarity(Polarity::Normal)
         .set_preamble_length(PreambleLength::L8)
-        .set_spreading_factor(SpreadingFactor::S12) // High SF == Best range
+        .set_spreading_factor(SpreadingFactor::S10) // High SF == Best range
         .set_sync_word(SyncWord::PRIVATE);
     rfm95.set_config(&lora_config).unwrap();
 
-    writeln!(serial, "Beginning transmission...").ok();
-    transmit(&mut rfm95, b"Hello world!");
-    writeln!(serial, "Transmission complete.").ok();
-
-    writeln!(serial, "Beginning recieve...").ok();
-    let mut recieve_buf = [0u8; RFM95_FIFO_SIZE];
-    let packet = recieve(&mut rfm95, &mut recieve_buf);
-    writeln!(serial, "Recieve ended.").ok();
-    println!("{:?}", packet);
-
+    
+    /*
+    loop {
+        println!("Beginning transmission...");
+        transmit(&mut rfm95, b"Hello world!");
+        println!("Transmission complete.");
+        delay.delay_ms(1000);
+    }*/
+    
+    loop {
+        println!("Beginning recieve...");
+        let mut recieve_buf = [0u8; RFM95_FIFO_SIZE];
+        let packet = recieve(&mut rfm95, &mut recieve_buf);
+        println!("Recieve ended.");
+        println!("Packet: {}", str::from_utf8(packet).unwrap());
+    }
     idle_loop(red_led, green_led, blue_led, delay);
 }
 
 type HorribleEmbeddedHalCompatRFM95Type = Rfm95Driver<embedded_hal_compat::Forward<msp430fr2x5x_hal::spi::SpiBus<msp430fr2355::E_USCI_B1>>, embedded_hal_compat::Forward<Pin<msp430fr2355::P4, msp430fr2x5x_hal::gpio::Pin4, Output>, embedded_hal_compat::markers::ForwardOutputPin>>;
 
 fn recieve<'b>(rfm95: &mut HorribleEmbeddedHalCompatRFM95Type, buf: &'b mut [u8; RFM95_FIFO_SIZE]) -> &'b [u8] {
-    let max_timeout = rfm95.rx_timeout_max().unwrap();
-    rfm95.start_rx(max_timeout).unwrap();
-
     let size;
-    loop {
-        match rfm95.complete_rx(buf) {
-            Ok(Some(n)) => {size = n; break;},
-            Ok(None) => continue,
-            Err(e) => panic!("{e}"),
-        };
-    };
+    'outer: loop {
+        let max_timeout = rfm95.rx_timeout_max().unwrap();
+        rfm95.start_rx(max_timeout).unwrap();
 
+        
+        'inner: loop {
+            match rfm95.complete_rx(buf) {
+                Ok(Some(n)) => {size = n; break 'outer;},
+                Ok(None) => continue,
+                Err(_) => break 'inner,
+            };
+        };
+
+    }
     &buf[0..size]
 }
 
@@ -177,7 +192,7 @@ fn idle_loop(mut red_led: Pin<P2, Pin0, Output>, mut green_led: Pin<P2, Pin2, Ou
     }
 }
 
-struct MySerial(msp430fr2x5x_hal::serial::Tx<E_USCI_A1>);
+struct MySerial(msp430fr2x5x_hal::serial::Tx<E_USCI_A0>);
 impl core::fmt::Write for MySerial {
     fn write_str(&mut self, s: &str) -> core::fmt::Result {
         for char in s.chars() {
