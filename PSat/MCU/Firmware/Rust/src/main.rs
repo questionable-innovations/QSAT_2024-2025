@@ -6,6 +6,7 @@ use msp430_rt::entry;
 use msp430fr2x5x_hal::hal::blocking::delay::DelayMs;
 
 // Internal modules
+mod pin_mappings { include!("pin_mappings_v2_0.rs"); } // Import 'pin_mappings_v2_0' as 'pin_mappings'
 mod board;
 mod serial;
 mod panic_handler;
@@ -31,24 +32,23 @@ fn idle_loop(mut board: Board) -> ! {
     loop {
         // Snake the LEDs through the rainbow
         const LED_DELAY_MS: u16 = 50; // ms
-        // Returns a `Result` because of embedded_hal, but the result is always `Ok` with MSP430 GPIO.
-        // Rust complains about unused Results, so we 'use' the Result by calling .ok()
-        board.red_led.turn_on();
+
+        board.gpio.red_led.turn_on();
         board.delay.delay_ms(LED_DELAY_MS);
 
-        board.green_led.turn_on();
+        board.gpio.green_led.turn_on();
         board.delay.delay_ms(LED_DELAY_MS);
 
-        board.blue_led.turn_on();
+        board.gpio.blue_led.turn_on();
         board.delay.delay_ms(LED_DELAY_MS);
 
-        board.red_led.turn_off();
+        board.gpio.red_led.turn_off();
         board.delay.delay_ms(LED_DELAY_MS);
 
-        board.green_led.turn_off();
+        board.gpio.green_led.turn_off();
         board.delay.delay_ms(LED_DELAY_MS);
 
-        board.blue_led.turn_off();
+        board.gpio.blue_led.turn_off();
         board.delay.delay_ms(LED_DELAY_MS);
     }
 }

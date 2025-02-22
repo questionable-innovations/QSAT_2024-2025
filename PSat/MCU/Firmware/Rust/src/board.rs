@@ -1,67 +1,35 @@
 // An example board support package for a stack using the MCU and Beacon boards.
 
 #![allow(dead_code)]
-use embedded_lora_rfm95::rfm95;
 use msp430::critical_section;
-use msp430fr2355::{E_USCI_A1, E_USCI_B0, P2, P4, P5};
 use msp430fr2x5x_hal::{
     adc::{Adc, AdcConfig, ClockDivider, Predivider, Resolution, SampleTime, SamplingRate}, 
     clock::{Clock, ClockConfig, DcoclkFreqSel, MclkDiv, SmclkDiv}, 
     delay::Delay, fram::Fram, 
-    gpio::{Alternate3, Batch, Floating, Input, Output, Pin, Pin0, Pin1, Pin2, Pin3, Pin4, PinNum, PortNum}, 
+    gpio::{Alternate1, Alternate3, Batch, Floating, Input, Output, Pin, Pin0, Pin1, Pin2, Pin3, Pin4, Pin5, Pin6, Pin7, Pullup, P1, P2, P3, P4, P5, P6}, 
     i2c::{GlitchFilter, I2CBusConfig, I2cBus}, pmm::Pmm, 
-    serial::{BitCount, BitOrder, Loopback, Parity, Rx, SerialConfig, StopBits, Tx}, 
+    pac::{E_USCI_B0, PMM},
+    serial::{BitCount, BitOrder, Loopback, Parity, SerialConfig, StopBits}, 
     spi::SpiBusConfig, 
     watchdog::Wdt
 };
-use embedded_hal::digital::v2::OutputPin;
-use crate::{lora::{self, RFM95}, println};
+use embedded_hal::digital::v2::{OutputPin, ToggleableOutputPin};
+use crate::{gps::{self, Gps}, lora::Radio, pin_mappings::{BlueLedPin, DebugTxPin, Enable1v8Pin, Enable5vPin, GpsEnPin, GpsRxPin, GpsTxPin, GreenLedPin, HalfVbatPin, I2cSclPin, I2cSdaPin, LoraCsPin, LoraIrqPin, LoraResetPin, PowerGood1v8Pin, PowerGood3v3Pin, RedLedPin, SpiMisoPin, SpiMosiPin, SpiSclkPin}, println};
 
 /// Top-level object representing the board.
 pub struct Board {
     pub delay: Delay,
-    pub red_led:   RedLED,
-    pub green_led: GreenLED,
-    pub blue_led:  BlueLED,
-    pub gps_uart:   (Tx<E_USCI_A1>, Rx<E_USCI_A1>),
+    pub gps: Gps,
+    //pub gps_uart:   (Tx<E_USCI_A1>, Rx<E_USCI_A1>),
     pub i2c: I2cBus<E_USCI_B0>,
     pub adc: Adc,
-    pub lora_radio: RFM95,
-    pub lora_irq: LoraIrq,
-    pub gps_en: GpsEn,
-    pub half_vbat: HalfVbat,
+    pub radio: Radio,
+    pub gpio: Gpio,
 }
 // This is where you should implement functionality, like sending SPI packets to specific devices, etc. 
 impl Board {
     pub fn battery_voltage_mv(&mut self) -> u16 {
-        self.adc.read_voltage_mv(&mut self.half_vbat, 3300).unwrap() * 2
-    }
-    pub fn lora_blocking_transmit(&mut self, data: &[u8]) {
-        self.lora_radio.start_tx(data).unwrap();
-        loop {
-            match self.lora_radio.complete_tx(){
-                Ok(None) => continue,   // Still sending
-                Ok(_) => return,        // Sending complete
-                Err(e) => panic!("{e}"),
-            }
-        }
-    }
-    pub fn lora_blocking_recieve<'a>(&mut self, buf: &'a mut [u8; rfm95::RFM95_FIFO_SIZE]) -> &'a [u8] {
-        let size;
-        'outer: loop {
-            let max_timeout = self.lora_radio.rx_timeout_max().unwrap();
-            self.lora_radio.start_rx(max_timeout).unwrap();
-            
-            'inner: loop {
-                match self.lora_radio.complete_rx(buf) {
-                    Ok(Some(n)) => {size = n; break 'outer;},
-                    Ok(None) => continue,
-                    Err("RX timeout") => break 'inner,
-                    Err(e) => panic!("{e}"),
-                };
-            };
-        }
-        &buf[0..size]
+        self.adc.read_voltage_mv(&mut self.gpio.half_vbat, 3300).unwrap() * 2
     }
 }
 
@@ -72,22 +40,8 @@ pub fn configure() -> Board {
     let regs = msp430fr2355::Peripherals::take().unwrap();
     let _wdt = Wdt::constrain(regs.WDT_A);
 
-    // Configure GPIO
-    let pmm = Pmm::new(regs.PMM);
-    let port1 = Batch::new(regs.P1).split(&pmm);
-    let port2 = Batch::new(regs.P2).split(&pmm);
-    let port4 = Batch::new(regs.P4).split(&pmm);
-    let port5 = Batch::new(regs.P5).split(&pmm);
-
-    let half_vbat = port5.pin0.to_alternate3(); // ADC pin. Connected to Vbat/2.
-
-    // LEDs
-    let mut red_led = RedLED::new(port2.pin0.to_output());
-    let mut blue_led = BlueLED::new(port2.pin1.to_output());
-    let mut green_led = GreenLED::new(port2.pin2.to_output());
-    red_led.turn_off();
-    green_led.turn_off();
-    blue_led.turn_off();
+    // Configure GPIO. `used` are pins consumed by other peripherals.
+    let (gpio, used) = Gpio::configure(regs.P1, regs.P2, regs.P3, regs.P4, regs.P5, regs.P6, regs.PMM);
 
     // Configure clocks to get accurate delay timing, and used by other peripherals
     let mut fram = Fram::new(regs.FRCTL);
@@ -97,38 +51,17 @@ pub fn configure() -> Board {
         .freeze(&mut fram);
 
     // SPI, used by the LoRa radio
-    let miso_pin = port4.pin7.to_alternate1();
-    let mosi_pin = port4.pin6.to_alternate1();
-    let sclk_pin = port4.pin5.to_alternate1();
     let spi = SpiBusConfig::new(regs.E_USCI_B1, embedded_hal::spi::MODE_0, true)
         .use_smclk(&smclk, 32)
-        .configure_with_software_cs(miso_pin, mosi_pin, sclk_pin);
+        .configure_with_software_cs(used.miso, used.mosi, used.sclk);
 
     // LoRa radio
-    let mut lora_reset = port5.pin2.to_output(); // Not actually connected...
-    let mut lora_cs = port4.pin4.to_output();
-    lora_reset.set_high().ok();
-    lora_cs.set_high().ok();
-    let lora_irq = port5.pin3;
-    let lora_radio = lora::prepare_radio(spi, lora_cs, lora_reset, delay);
+    let radio = crate::lora::new(spi, used.lora_cs, used.lora_reset, delay);
 
-    // GPS UART
-    let gps_tx_pin = port4.pin3.to_alternate1();
-    let gps_rx_pin = port4.pin2.to_alternate1();
-    let mut gps_en = port4.pin1.to_output(); // active low
-    gps_en.set_low().ok();
-    let (gps_tx, gps_rx) = SerialConfig::new(regs.E_USCI_A1, 
-        BitOrder::LsbFirst, 
-        BitCount::EightBits, 
-        StopBits::OneStopBit, 
-        Parity::NoParity, 
-        Loopback::NoLoop, 
-        9600)
-        .use_smclk(&smclk)
-        .split(gps_tx_pin, gps_rx_pin);
+    // GPS
+    let gps = gps::Gps::new(regs.E_USCI_A1, &smclk, used.gps_tx_pin, used.gps_rx_pin);
 
     // Spare UART, useful for debug printing to a computer
-    let debug_tx_pin = port1.pin7.to_alternate1();
     let debug_uart = SerialConfig::new(regs.E_USCI_A0, 
         BitOrder::LsbFirst, 
         BitCount::EightBits, 
@@ -137,7 +70,7 @@ pub fn configure() -> Board {
         Loopback::NoLoop, 
         115200)
         .use_smclk(&smclk)
-        .tx_only(debug_tx_pin);
+        .tx_only(used.debug_tx_pin);
 
     // Wrap the UART in a newtype that can print arbitrary strings, utilising core::fmt::Write
     let debug_uart = crate::serial::PrintableSerial(debug_uart);
@@ -149,15 +82,13 @@ pub fn configure() -> Board {
     println!("Serial init"); // Like this!
 
     // I2C
-    let i2c_sda_pin = port1.pin2.to_alternate1();
-    let i2c_scl_pin = port1.pin3.to_alternate1();
     const I2C_FREQ: u32 = 100_000; //Hz
     let clk_div = (smclk.freq() / I2C_FREQ) as u16;
     let i2c = I2CBusConfig::new(
         regs.E_USCI_B0, 
         GlitchFilter::Max50ns)
         .use_smclk(&smclk, clk_div)
-        .configure(i2c_scl_pin, i2c_sda_pin);
+        .configure(used.i2c_scl_pin, used.i2c_sda_pin);
 
     // ADC
     let adc = AdcConfig::new(
@@ -169,48 +100,190 @@ pub fn configure() -> Board {
         .use_modclk()
         .configure(regs.ADC);
 
-    Board {delay, red_led, green_led, blue_led, gps_uart: (gps_tx, gps_rx), lora_radio, i2c, adc, gps_en, lora_irq, half_vbat}
+    Board {delay, gps, radio, i2c, adc, gpio}
 }
-/// Pin 2.0
-pub type RedLED    = Led<P2, Pin0>;
-
-/// Pin 2.2
-pub type GreenLED  = Led<P2, Pin2>;
-
-// Depending on whether you soldered the RGB LED or the individual LEDs:
-/// Pin 2.1
-pub type BlueLED   = Led<P2, Pin1>;
-///// Pin 2.1
-//type YellowLED = Pin<P2, Pin1, Output>;
-
-/// Pin 4.4
-pub type LoraChipSel  = Pin<P4, Pin4, Output>;
-
-/// Pin 4.1
-pub type GpsEn  = Pin<P4, Pin1, Output>;
-
-/// Pin 5.3
-pub type LoraIrq = Pin<P5, Pin3, Input<Floating>>;
-
-/// Pin 5.0. Connected to Vbat/2. Sense with the ADC.
-pub type HalfVbat = Pin<P5, Pin0, Alternate3<Input<Floating>>>;
 
 /// The RGB LEDs are active low, which can be a little confusing. A helper struct to reduce cognitive load.
-pub struct Led<PORT: PortNum, PIN: PinNum> {
-    pub pin: Pin<PORT, PIN, Output>,
-}
-impl<PORT: PortNum, PIN: PinNum> Led<PORT, PIN> {
-    pub fn new(pin: Pin<PORT, PIN, Output>) -> Self {
-        Self {pin}
+pub struct Led<PIN: OutputPin+ToggleableOutputPin>(PIN);
+impl<PIN: OutputPin+ToggleableOutputPin> Led<PIN> {
+    pub fn new(pin: PIN) -> Self {
+        Self(pin)
     }
     pub fn turn_on(&mut self) {
-        self.pin.set_low().ok();
+        self.0.set_low().ok();
     }
     pub fn turn_off(&mut self) {
-        self.pin.set_high().ok();
+        self.0.set_high().ok();
     }
     pub fn toggle(&mut self) {
-        use embedded_hal::digital::v2::ToggleableOutputPin;
-        self.pin.toggle().ok();
+        self.0.toggle().ok();
     }
+}
+pub type RedLed     = Led<RedLedPin>;
+pub type BlueLed    = Led<BlueLedPin>;
+pub type GreenLed   = Led<GreenLedPin>;
+
+pub struct Gpio {
+    // LEDs
+    pub red_led:   RedLed,
+    pub green_led: GreenLed,
+    pub blue_led:  BlueLed,
+    
+    pub lora_irq:       LoraIrqPin,
+    pub gps_en:         GpsEnPin,
+    pub half_vbat:      HalfVbatPin,
+
+    // PSU monitoring and control pins
+    pub power_good_1v8: PowerGood1v8Pin,
+    pub power_good_3v3: PowerGood3v3Pin,
+    pub enable_1v8:     Enable1v8Pin,
+    pub enable_5v:      Enable5vPin,
+
+    // Unused UCA0 pins
+    pub pin1_4: Pin<P1, Pin4, Input<Floating>>,
+    pub pin1_5: Pin<P1, Pin5, Input<Floating>>,
+    pub pin1_6: Pin<P1, Pin6, Input<Floating>>,
+
+    // Unused UCA1 pins
+    pub pin4_0: Pin<P4, Pin0, Input<Floating>>,
+
+    // Unused UCB0 pins
+    pub pin1_0: Pin<P1, Pin0, Input<Floating>>,
+    pub pin1_1: Pin<P1, Pin1, Input<Floating>>,
+    
+    // Unused ADC pins
+    pub pin5_1: Pin<P5, Pin1, Input<Floating>>,
+
+    // Unused GPIO pins
+    pub pin2_3: Pin<P2, Pin3, Input<Floating>>,
+    pub pin2_4: Pin<P2, Pin4, Input<Floating>>,
+    pub pin2_5: Pin<P2, Pin5, Input<Floating>>,
+    pub pin2_6: Pin<P2, Pin6, Input<Floating>>,
+    pub pin2_7: Pin<P2, Pin7, Input<Floating>>,
+
+    pub pin3_4: Pin<P3, Pin4, Input<Floating>>,
+    pub pin3_5: Pin<P3, Pin5, Input<Floating>>,
+    pub pin3_6: Pin<P3, Pin6, Input<Floating>>,
+    pub pin3_7: Pin<P3, Pin7, Input<Floating>>,
+
+    pub pin6_0: Pin<P6, Pin0, Input<Floating>>,
+    pub pin6_1: Pin<P6, Pin1, Input<Floating>>,
+    pub pin6_2: Pin<P6, Pin2, Input<Floating>>,
+    pub pin6_3: Pin<P6, Pin3, Input<Floating>>,
+    pub pin6_4: Pin<P6, Pin4, Input<Floating>>,
+    pub pin6_5: Pin<P6, Pin5, Input<Floating>>,
+    pub pin6_6: Pin<P6, Pin6, Input<Floating>>,
+    pub pin6_7: Pin<P6, Pin7, Input<Floating>>,
+}
+impl Gpio {
+    fn configure(p1: P1, p2: P2, p3: P3, p4 :P4, p5: P5, p6: P6, pmm: PMM) -> (Self, ConsumedPins) {
+        // Configure GPIO
+        let pmm = Pmm::new(pmm);
+        let port1 = Batch::new(p1).split(&pmm);
+        let port2 = Batch::new(p2).split(&pmm);
+        let port3 = Batch::new(p3).split(&pmm);
+        let port4 = Batch::new(p4).split(&pmm);
+        let port5 = Batch::new(p5).split(&pmm);
+        let port6 = Batch::new(p6).split(&pmm);
+
+        let half_vbat = port5.pin0.to_alternate3(); // ADC pin. Connected to Vbat/2.
+
+        // LEDs
+        let mut red_led = RedLed::new(port2.pin0.to_output());
+        let mut blue_led = BlueLed::new(port2.pin1.to_output());
+        let mut green_led = GreenLed::new(port2.pin2.to_output());
+        red_led.turn_off();
+        green_led.turn_off();
+        blue_led.turn_off();
+
+        let miso = port4.pin7.to_alternate1();
+        let mosi = port4.pin6.to_alternate1();
+        let sclk = port4.pin5.to_alternate1();
+        
+        let mut lora_reset = port5.pin2.to_output(); // Not actually connected...
+        let mut lora_cs = port4.pin4.to_output();
+        lora_reset.set_high().ok();
+        lora_cs.set_high().ok();
+        let lora_irq = port5.pin3;
+
+        let gps_tx_pin = port4.pin3.to_alternate1();
+        let gps_rx_pin = port4.pin2.to_alternate1();
+        let mut gps_en = port4.pin1.to_output(); // active low
+        gps_en.set_low().ok();
+
+        let debug_tx_pin = port1.pin7.to_alternate1();
+
+        let i2c_sda_pin = port1.pin2.to_alternate1();
+        let i2c_scl_pin = port1.pin3.to_alternate1();
+
+        // Pins consumed by other perihperals
+        let used = ConsumedPins {mosi, miso, sclk, lora_cs, lora_reset, gps_rx_pin, gps_tx_pin, debug_tx_pin, i2c_scl_pin, i2c_sda_pin};
+
+        let pin1_0 = port1.pin0;
+        let pin1_1 = port1.pin1;
+        let pin1_4 = port1.pin4;
+        let pin1_5 = port1.pin5;
+        let pin1_6 = port1.pin6;
+
+        let pin2_3 = port2.pin3;
+        let pin2_4 = port2.pin4;
+        let pin2_5 = port2.pin5;
+        let pin2_6 = port2.pin6;
+        let pin2_7 = port2.pin7;
+
+        let power_good_1v8 = port3.pin0.pullup();
+        let power_good_3v3 = port3.pin1.pullup();
+        let mut enable_1v8 = port3.pin2.to_output();
+        enable_1v8.set_low().ok();
+        let mut enable_5v = port3.pin3.to_output();
+        enable_5v.set_low().ok();
+        let pin3_4 = port3.pin4;
+        let pin3_5 = port3.pin5;
+        let pin3_6 = port3.pin6;
+        let pin3_7 = port3.pin7;
+
+        let pin4_0 = port4.pin0;
+
+        let pin5_1 = port5.pin1;
+
+        let pin6_0 = port6.pin0;
+        let pin6_1 = port6.pin1;
+        let pin6_2 = port6.pin2;
+        let pin6_3 = port6.pin3;
+        let pin6_4 = port6.pin4;
+        let pin6_5 = port6.pin5;
+        let pin6_6 = port6.pin6;
+        let pin6_7 = port6.pin7;
+
+        let gpio = Self {
+            red_led, green_led, blue_led, 
+            lora_irq, 
+            gps_en, 
+            half_vbat, 
+            power_good_1v8, power_good_3v3, 
+            enable_1v8, enable_5v,
+            pin1_0, pin1_1, pin1_4, pin1_5, pin1_6,
+            pin2_3, pin2_4, pin2_5, pin2_6, pin2_7,
+            pin3_4, pin3_5, pin3_6, pin3_7,
+            pin4_0,
+            pin5_1,
+            pin6_0, pin6_1, pin6_2, pin6_3, pin6_4, pin6_5, pin6_6, pin6_7,
+        };
+
+        (gpio, used)
+    }
+}
+
+// Pins used by other peripherals.
+struct ConsumedPins {
+    miso:           SpiMisoPin,
+    mosi:           SpiMosiPin,
+    sclk:           SpiSclkPin,
+    lora_reset:     LoraResetPin,
+    lora_cs:        LoraCsPin,
+    gps_tx_pin:     GpsTxPin,
+    gps_rx_pin:     GpsRxPin,
+    debug_tx_pin:   DebugTxPin,
+    i2c_sda_pin:    I2cSdaPin,
+    i2c_scl_pin:    I2cSclPin,
 }
