@@ -16,7 +16,6 @@ mod gps;
 // Internal imports
 use board::Board;
 
-// Red onboard LED should blink at a steady period.
 #[entry]
 fn main() -> ! {
     let board = board::configure(); // Collect board elements, configure printing, etc.

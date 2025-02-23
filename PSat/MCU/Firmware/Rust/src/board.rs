@@ -1,37 +1,36 @@
 // An example board support package for a stack using the MCU and Beacon boards.
 
 #![allow(dead_code)]
-use msp430::critical_section;
 use msp430fr2x5x_hal::{
     adc::{Adc, AdcConfig, ClockDivider, Predivider, Resolution, SampleTime, SamplingRate}, 
     clock::{Clock, ClockConfig, DcoclkFreqSel, MclkDiv, SmclkDiv}, 
     delay::Delay, fram::Fram, 
-    gpio::{Alternate1, Alternate3, Batch, Floating, Input, Output, Pin, Pin0, Pin1, Pin2, Pin3, Pin4, Pin5, Pin6, Pin7, Pullup, P1, P2, P3, P4, P5, P6}, 
+    gpio::{Batch, Floating, Input, Pin, Pin0, Pin1, Pin2, Pin3, Pin4, Pin5, Pin6, Pin7, P1, P2, P3, P4, P5, P6}, 
     i2c::{GlitchFilter, I2CBusConfig, I2cBus}, pmm::Pmm, 
     pac::{E_USCI_B0, PMM},
-    serial::{BitCount, BitOrder, Loopback, Parity, SerialConfig, StopBits}, 
     spi::SpiBusConfig, 
     watchdog::Wdt
 };
 use embedded_hal::digital::v2::{OutputPin, ToggleableOutputPin};
-use crate::{gps::{self, Gps}, lora::Radio, pin_mappings::{BlueLedPin, DebugTxPin, Enable1v8Pin, Enable5vPin, GpsEnPin, GpsRxPin, GpsTxPin, GreenLedPin, HalfVbatPin, I2cSclPin, I2cSdaPin, LoraCsPin, LoraIrqPin, LoraResetPin, PowerGood1v8Pin, PowerGood3v3Pin, RedLedPin, SpiMisoPin, SpiMosiPin, SpiSclkPin}, println};
+use crate::{gps::Gps, lora::Radio, pin_mappings::{BlueLedPin, DebugTxPin, Enable1v8Pin, Enable5vPin, GpsEnPin, GpsRxPin, GpsTxPin, GreenLedPin, HalfVbatPin, I2cSclPin, I2cSdaPin, LoraCsPin, LoraIrqPin, LoraResetPin, PowerGood1v8Pin, PowerGood3v3Pin, RedLedPin, SpiMisoPin, SpiMosiPin, SpiSclkPin}, println};
 
 /// Top-level object representing the board.
 pub struct Board {
     pub delay: Delay,
     pub gps: Gps,
-    //pub gps_uart:   (Tx<E_USCI_A1>, Rx<E_USCI_A1>),
     pub i2c: I2cBus<E_USCI_B0>,
     pub adc: Adc,
     pub radio: Radio,
     pub gpio: Gpio,
 }
-// This is where you should implement functionality, like sending SPI packets to specific devices, etc. 
+// This is where you should implement top-level functionality. 
 impl Board {
     pub fn battery_voltage_mv(&mut self) -> u16 {
         self.adc.read_voltage_mv(&mut self.gpio.half_vbat, 3300).unwrap() * 2
     }
 }
+
+pub const DEBUG_SERIAL_BAUD: u32 = 115200;
 
 /// Call this function ONCE at the beginning of your program.
 /// Printing won't work until this function is called.
@@ -59,26 +58,10 @@ pub fn configure() -> Board {
     let radio = crate::lora::new(spi, used.lora_cs, used.lora_reset, delay);
 
     // GPS
-    let gps = gps::Gps::new(regs.E_USCI_A1, &smclk, used.gps_tx_pin, used.gps_rx_pin);
+    let gps = crate::gps::Gps::new(regs.E_USCI_A1, &smclk, used.gps_tx_pin, used.gps_rx_pin);
 
     // Spare UART, useful for debug printing to a computer
-    let debug_uart = SerialConfig::new(regs.E_USCI_A0, 
-        BitOrder::LsbFirst, 
-        BitCount::EightBits, 
-        StopBits::OneStopBit, 
-        Parity::NoParity, 
-        Loopback::NoLoop, 
-        115200)
-        .use_smclk(&smclk)
-        .tx_only(used.debug_tx_pin);
-
-    // Wrap the UART in a newtype that can print arbitrary strings, utilising core::fmt::Write
-    let debug_uart = crate::serial::PrintableSerial(debug_uart);
-
-    // Move the UART into a global so it can be called anywhere, including in panics.
-    critical_section::with(|cs| {
-        crate::serial::SERIAL.replace(cs, Some(debug_uart))
-    });
+    crate::serial::configure_debug_serial(used.debug_tx_pin, &smclk, regs.E_USCI_A0);
     println!("Serial init"); // Like this!
 
     // I2C
