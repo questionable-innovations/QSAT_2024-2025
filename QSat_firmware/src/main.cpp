@@ -1,5 +1,4 @@
 #include <Arduino.h>
-#include <Energia.h>
 
 long unsigned int currentValue = 0;
 
