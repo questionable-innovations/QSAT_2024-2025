@@ -3,18 +3,17 @@
 #![allow(dead_code)]
 use msp430fr2x5x_hal::{
     adc::{Adc, AdcConfig, ClockDivider, Predivider, Resolution, SampleTime, SamplingRate}, 
-    clock::{Clock, ClockConfig, DcoclkFreqSel, MclkDiv, SmclkDiv}, 
-    delay::Delay, fram::Fram, 
+    clock::{Clock, ClockConfig, DcoclkFreqSel, MclkDiv, SmclkDiv}, delay::Delay, fram::Fram, 
     gpio::{Batch, Floating, Input, Pin, Pin0, Pin1, Pin2, Pin3, Pin4, Pin5, Pin6, Pin7, P1, P2, P3, P4, P5, P6}, 
-    i2c::{GlitchFilter, I2CBusConfig, I2cBus}, pmm::Pmm, 
-    pac::{E_USCI_B0, PMM},
-    spi::SpiBusConfig, 
-    watchdog::Wdt
+    i2c::{GlitchFilter, I2CBusConfig, I2cBus}, 
+    pac::{E_USCI_B0, PMM, TB0}, pmm::Pmm, pwm::TimerConfig, spi::SpiBusConfig, timer::{Timer, TimerParts3}, watchdog::Wdt
 };
 use embedded_hal::digital::v2::{OutputPin, ToggleableOutputPin};
-use crate::{gps::Gps, lora::Radio, pin_mappings::{BlueLedPin, DebugTxPin, Enable1v8Pin, Enable5vPin, GpsEnPin, GpsRxPin, GpsTxPin, GreenLedPin, HalfVbatPin, I2cSclPin, I2cSdaPin, LoraCsPin, LoraIrqPin, LoraResetPin, PowerGood1v8Pin, PowerGood3v3Pin, RedLedPin, SpiMisoPin, SpiMosiPin, SpiSclkPin}, println};
+use crate::{gps::Gps, lora::Radio, pin_mappings::*, println};
 
 /// Top-level object representing the board.
+/// 
+/// Not all peripherals are configured. If you need more, add their configuration code to ::configure().
 pub struct Board {
     pub delay: Delay,
     pub gps: Gps,
@@ -22,6 +21,7 @@ pub struct Board {
     pub adc: Adc,
     pub radio: Radio,
     pub gpio: Gpio,
+    pub timer_b0: Timer<TB0>,
 }
 // This is where you should implement top-level functionality. 
 impl Board {
@@ -44,9 +44,10 @@ pub fn configure() -> Board {
 
     // Configure clocks to get accurate delay timing, and used by other peripherals
     let mut fram = Fram::new(regs.FRCTL);
-    let (smclk, _aclk, delay) = ClockConfig::new(regs.CS)
+    let (smclk, aclk, delay) = ClockConfig::new(regs.CS)
         .mclk_dcoclk(DcoclkFreqSel::_8MHz, MclkDiv::_1)
         .smclk_on(SmclkDiv::_1)
+        .aclk_refoclk() // 32768 Hz
         .freeze(&mut fram);
 
     // SPI, used by the LoRa radio
@@ -63,6 +64,10 @@ pub fn configure() -> Board {
     // Spare UART, useful for debug printing to a computer
     crate::serial::configure_debug_serial(used.debug_tx_pin, &smclk, regs.E_USCI_A0);
     println!("Serial init"); // Like this!
+
+    // Timer
+    let timer_parts = TimerParts3::new(regs.TB0, TimerConfig::aclk(&aclk));
+    let timer_b0 = timer_parts.timer;
 
     // I2C
     const I2C_FREQ: u32 = 100_000; //Hz
@@ -83,7 +88,7 @@ pub fn configure() -> Board {
         .use_modclk()
         .configure(regs.ADC);
 
-    Board {delay, gps, radio, i2c, adc, gpio}
+    Board {delay, gps, radio, i2c, adc, gpio, timer_b0}
 }
 
 /// The RGB LEDs are active low, which can be a little confusing. A helper struct to reduce cognitive load.
