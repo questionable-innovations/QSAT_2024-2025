@@ -131,6 +131,18 @@ register! {
     RegRxNbBytes<0x13, 0, 8>
 }
 register! {
+    "SNR of last packet recieved",
+    RegPktSnrValue<0x19, 0, 8>
+}
+register! {
+    "RSSI of last packet recieved",
+    RegPktRssiValue<0x1A, 0, 8>
+}
+register! {
+    "Current RSSI value",
+    RegRssiValue<0x1B, 0, 8>
+}
+register! {
     "Signal bandwidth (see datasheet for more info)",
     RegModemConfig1Bw<0x1D, 4, 4>
 }

@@ -435,6 +435,46 @@ where
         Ok(Some(len as usize))
     }
 
+    /// When operating in the high frequency range the RSSI register values are offset by this much. 
+    const HF_RSSI_OFFSET: i16 = -157;
+
+    /// When operating in the low frequency range the RSSI register values are offset by this much. 
+    const LF_RSSI_OFFSET: i16 = -164;
+    
+    /// The cutoff frequency that separates the high and low frequency ranges. Anything below this value is LF.
+    const HF_LF_BOUNDARY_FREQ: Frequency = Frequency::hz(779_000_000);
+
+    /// Get the signal strength of the last recieved packet.
+    /// 
+    /// Unlike RSSI, this accounts for LoRa's ability to recieve packets below the noise floor.
+    pub fn get_packet_strength(&mut self) -> Result<i16, &'static str> {
+        let offset = if self.frequency()? >= Self::HF_LF_BOUNDARY_FREQ {Self::HF_RSSI_OFFSET} else {Self::LF_RSSI_OFFSET};
+        let snr = self.get_packet_snr()?;
+        if snr >= 0 {
+            Ok( self.spi.read(RegRssiValue)? as i16 + offset )
+        }
+        else {
+            Ok( self.spi.read(RegPktRssiValue)? as i16 + snr as i16 + offset )
+        }
+    }
+
+    /// Get a Relative Signal Strength Indicator (RSSI) of the last recieved packet.
+    pub fn get_rssi(&mut self) -> Result<i16, &'static str> {
+        let offset = if self.frequency()? > Self::HF_LF_BOUNDARY_FREQ {Self::HF_RSSI_OFFSET} else {Self::LF_RSSI_OFFSET};
+        if self.get_packet_snr()? >= 0 {
+            Ok( self.spi.read(RegPktRssiValue)? as i16 * 16/15 + offset )
+        }
+        else {
+            Ok( self.spi.read(RegRssiValue)? as i16 + offset )
+        }
+    }
+
+    /// Get the Signal to Noise Ratio (SNR) of the last recieved packet.
+    pub fn get_packet_snr(&mut self) -> Result<i8, &'static str> {
+        // The value is stored in two's complement form in the register, so the cast to i8 is fine
+        Ok( (self.spi.read(RegPktSnrValue)? as i8 ) / 4)
+    }
+
     /// Dumps all used registers; usefule for debugging purposes
     #[cfg(feature = "debug")]
     pub fn dump_registers(&mut self) -> Result<[u8; REGISTER_MAX as usize + 1], &'static str> {
