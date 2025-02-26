@@ -2,13 +2,14 @@ use msp430fr2x5x_hal::{clock::Smclk, serial::{BitCount, BitOrder, Loopback, Pari
 
 /// Configure the debug UART for use with println!().
 pub fn configure_debug_serial(pin: DebugTxPin, smclk: &Smclk, debug_eusci: DebugEusci) {
+    pub const DEBUG_SERIAL_BAUD: u32 = 115200;
     let debug_uart = msp430fr2x5x_hal::serial::SerialConfig::new(debug_eusci, 
         BitOrder::LsbFirst, 
         BitCount::EightBits, 
         StopBits::OneStopBit, 
         Parity::NoParity, 
         Loopback::NoLoop, 
-        crate::board::DEBUG_SERIAL_BAUD)
+        DEBUG_SERIAL_BAUD)
         .use_smclk(smclk)
         .tx_only(pin);
 

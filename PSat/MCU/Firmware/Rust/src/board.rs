@@ -30,8 +30,6 @@ impl Board {
     }
 }
 
-pub const DEBUG_SERIAL_BAUD: u32 = 115200;
-
 /// Call this function ONCE at the beginning of your program.
 /// Printing won't work until this function is called.
 pub fn configure() -> Board {
