@@ -8,7 +8,7 @@ use core::panic::PanicInfo;
 fn panic_handler(panic_info: &PanicInfo) -> ! {
     msp430::interrupt::disable();
 
-    ensure_serial_configured();
+    //ensure_serial_configured();
     print!("Panic: ");
     if let Some(location) = panic_info.location() {
         // Printing code locations adds a lot of executable size

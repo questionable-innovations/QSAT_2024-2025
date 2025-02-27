@@ -141,12 +141,25 @@ impl DelayNs for DelayWrapper {
 
 pub mod tests {
     use embedded_hal::timer::CountDown;
+    use ufmt::uwrite;
 
     pub fn range_test_tx(mut board: crate::board::Board) -> ! {
+        let mut current_time = Time::default();
         board.timer_b0.start(msp430fr2x5x_hal::clock::REFOCLK); // 1 second timer
         loop {
-            board.radio.blocking_transmit(b"Range test");
+            let bytes = [
+                current_time.hours / 10 + b'0', 
+                current_time.hours % 10 + b'0', 
+                b':', 
+                current_time.minutes / 10 + b'0', 
+                current_time.minutes % 10 + b'0', 
+                b':', 
+                current_time.seconds / 10 + b'0', 
+                current_time.seconds % 10 + b'0'];
+            board.radio.blocking_transmit(&bytes);
             nb::block!(board.timer_b0.wait()).ok();
+            current_time.increment();
+            board.gpio.green_led.toggle();
         }
     }
 
@@ -164,6 +177,7 @@ pub mod tests {
                     let rssi = board.radio.driver.get_rssi().unwrap(); 
                     let snr = board.radio.driver.get_packet_snr().unwrap(); 
                     crate::println!("[{}] '{}', Strength: {}, RSSI: {}, SNR: {}", current_time, core::str::from_utf8(packet).unwrap(), signal_strength, rssi, snr);
+                    board.radio.async_recieve_start(None)
                 },
             }
 
@@ -198,7 +212,18 @@ pub mod tests {
     }
     impl ufmt::uDisplay for Time {
         fn fmt<W: ufmt::uWrite + ?Sized>(&self, f: &mut ufmt::Formatter<'_, W>) -> Result<(), W::Error> {
-            ufmt::uwrite!(f, "{}:{}:{}", self.hours, self.minutes, self.seconds)
+            for (i, &val) in [self.hours, self.minutes, self.seconds].iter().enumerate() {
+                if val < 10 {
+                    ufmt::uwrite!(f, "0{}", val)?;
+                }
+                else {
+                    ufmt::uwrite!(f, "{}", val)?; 
+                }
+                if i != 2 {
+                    ufmt::uwrite!(f, ":")?;
+                }
+            }
+            Ok(())
         }
     }
 }

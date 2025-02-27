@@ -39,7 +39,7 @@ pub fn configure() -> Board {
 
     // Configure GPIO. `used` are pins consumed by other peripherals.
     let (gpio, used) = Gpio::configure(regs.P1, regs.P2, regs.P3, regs.P4, regs.P5, regs.P6, regs.PMM);
-
+    
     // Configure clocks to get accurate delay timing, and used by other peripherals
     let mut fram = Fram::new(regs.FRCTL);
     let (smclk, aclk, delay) = ClockConfig::new(regs.CS)
@@ -48,20 +48,20 @@ pub fn configure() -> Board {
         .aclk_refoclk() // 32768 Hz
         .freeze(&mut fram);
 
+    // Spare UART, useful for debug printing to a computer
+    crate::serial::configure_debug_serial(used.debug_tx_pin, &smclk, regs.E_USCI_A0);
+    println!("Serial init"); // Like this!
+    
     // SPI, used by the LoRa radio
     let spi = SpiBusConfig::new(regs.E_USCI_B1, embedded_hal::spi::MODE_0, true)
         .use_smclk(&smclk, 32)
         .configure_with_software_cs(used.miso, used.mosi, used.sclk);
-
+    
     // LoRa radio
     let radio = crate::lora::new(spi, used.lora_cs, used.lora_reset, delay);
 
     // GPS
     let gps = crate::gps::Gps::new(regs.E_USCI_A1, &smclk, used.gps_tx_pin, used.gps_rx_pin);
-
-    // Spare UART, useful for debug printing to a computer
-    crate::serial::configure_debug_serial(used.debug_tx_pin, &smclk, regs.E_USCI_A0);
-    println!("Serial init"); // Like this!
 
     // Timer
     let timer_parts = TimerParts3::new(regs.TB0, TimerConfig::aclk(&aclk));
