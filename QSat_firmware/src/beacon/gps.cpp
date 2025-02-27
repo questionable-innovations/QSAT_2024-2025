@@ -1,6 +1,7 @@
-#include <beacon/gps.h>
 #include "gps.h"
-
+#include <TinyGPSPlus.h>
+#include <SoftwareSerial.h>
+#include <definitions/pins.h>
 /*
    This sample code tracks satellite elevations using TinyGPSCustom objects.
 
@@ -18,29 +19,6 @@ static const int PAGE_LENGTH = 40;
 // The TinyGPSPlus object
 TinyGPSPlus gps;
 
-// The serial connection to the GPS device, using GPS_RX, GPS_TX
-
-// struct ring_buffer;
-
-// class HardwareSerial : public Stream
-// {
-// 	private:
-// 		ring_buffer *_rx_buffer;
-// 		ring_buffer *_tx_buffer;
-// 		uint8_t uartOffset;
-// 		uint16_t rxPinMode;
-// 		uint16_t txPinMode;
-// 		uint8_t rxPin;
-// 		uint8_t txPin;
-// 		uint8_t lock;
-// 	public:
-// 		HardwareSerial(ring_buffer *rx_buffer, ring_buffer *tx_buffer, uint8_t uartOffset, uint16_t rxPinMode, uint16_t txPinMode, uint8_t rxPin, uint8_t txPin)
-
-
-ring_buffer rx_buffer;
-ring_buffer tx_buffer;
-
-HardwareSerial hs(&rx_buffer, &tx_buffer, DEBUG_UART_MODULE_OFFSET, 0, 0, GPS_RX, GPS_TX);
 
 
 TinyGPSCustom totalGPGSVMessages(gps, "GPGSV", 1);  // $GPGSV sentence, first element
@@ -50,14 +28,20 @@ TinyGPSCustom elevation[4];
 bool anyChanges = false;
 unsigned long linecount = 0;
 
-struct
+struct Satellite
 {
-    int elevation;
-    bool active;
-} sats[MAX_SATELLITES];
+	int elevation;
+	bool active;
+};
+Satellite sats[MAX_SATELLITES];
+
+// Function prototypes
+void printHeader();
+void IntPrint(int n, int len);
+void TimePrint();
 
 void setupGps() {
-    hs.begin(GPSBaud);
+    Serial1.begin(GPSBaud);
 
     Serial.println(F("SatElevTracker.ino"));
     Serial.println(F("Displays GPS satellite elevations as they change"));
@@ -75,8 +59,8 @@ void setupGps() {
 
 void gpsLoop() {
     // Dispatch incoming characters
-    if (hs.available() > 0) {
-	gps.encode(hs.read());
+    if (Serial1.available() > 0) {
+	gps.encode(Serial1.read());
 
 	if (totalGPGSVMessages.isUpdated()) {
 	    for (int i = 0; i < 4; ++i) {

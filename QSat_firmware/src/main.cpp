@@ -24,7 +24,6 @@ void angle_set(int pin, int angle) {
   }
   old_duty = duty;
   analogWrite(pin, (int)(duty));
-
 }
 
 void loop() {
