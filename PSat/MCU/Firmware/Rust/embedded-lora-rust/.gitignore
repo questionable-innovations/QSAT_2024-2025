@@ -1,0 +1,15 @@
+# Ignore .DS_Store
+.DS_Store
+
+# Ignore build results and tmp files
+/Cargo.lock
+/target
+/*.tmp
+
+# Ignore some vscode files
+.vscode/*
+!.vscode/*.md
+!.vscode/launch.json
+!.vscode/tasks.json
+!.vscode/extensions.json
+!.vscode/settings.json

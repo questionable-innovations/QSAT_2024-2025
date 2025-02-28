@@ -1,0 +1,35 @@
+# Since we use custom test script, disable the default build action
+build: false
+
+
+# The Rust feature matrix
+configuration:
+  - --features=
+  - --features=debug
+  - --features=fugit
+  - --features=debug,fugit
+
+
+# General environment vars
+environment:
+  # Promote warnings to errors
+  RUSTFLAGS: -D warnings
+
+
+# Fail fast if one job in the matrix fails
+matrix:
+  fast_finish: true
+
+
+# Build library
+for:
+  - environment:
+      APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu2004
+    install:
+      - curl https://sh.rustup.rs -sSf -o rustup-init.sh
+      - sh rustup-init.sh -y --default-host x86_64-unknown-linux-gnu
+      - source $HOME/.cargo/env
+    test_script:
+      # Only build as we cannot reasonably emulate hardware to really run the code
+      - cargo build --verbose --no-default-features $CONFIGURATION
+      - cargo build --verbose --release --no-default-features $CONFIGURATION
