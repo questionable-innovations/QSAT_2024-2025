@@ -30,7 +30,7 @@ fn main() -> ! {
 fn idle_loop(mut board: Board) -> ! {
     loop {
         // Snake the LEDs through the rainbow
-        const LED_DELAY_MS: u16 = 50; // ms
+        const LED_DELAY_MS: u16 = 250; // ms
 
         board.gpio.red_led.turn_on();
         board.delay.delay_ms(LED_DELAY_MS);

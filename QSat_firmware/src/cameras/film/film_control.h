@@ -13,3 +13,5 @@ enum Direction {
 
 
 void reload_set_direction(Direction direction);
+
+bool reload_complete();

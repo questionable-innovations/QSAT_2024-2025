@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <leds.h>
 
 long unsigned int currentValue = 0;
 
@@ -6,9 +7,11 @@ long resolution = 255;
 
 void setup() {
   Serial.begin(9600);
+  
   pinMode(P2_0, OUTPUT);
   analogFrequency(50);
   analogResolution(resolution);
+  led_setup();
 }
 
 int old_duty = 0;
@@ -27,6 +30,7 @@ void angle_set(int pin, int angle) {
 }
 
 void loop() {
+  led_loop();
   // put your main code here, to run repeatedly:
   int angle = currentValue % 180;
   Serial.print("Angle: ");

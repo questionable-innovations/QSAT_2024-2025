@@ -5,11 +5,11 @@ use core::time::Duration;
 use embedded_lora_rfm95::{lora::types::{Bandwidth, CodingRate, CrcMode, HeaderMode, Polarity, PreambleLength, SpreadingFactor, SyncWord}, rfm95::{self, Rfm95Driver}};
 use embedded_hal_compat::{eh1_0::delay::DelayNs, Forward, ForwardCompat};
 use msp430fr2x5x_hal::{delay::Delay, gpio::{Output, Pin, Pin4}, spi::SpiBus, pac::P4};
-use crate::pin_mappings::{RadioCsPin, RadioEusci, RadioResetPin, RadioSpi};
+use crate::pin_mappings::{LoraCSPin, LoraEusci, LoraResetPin, LoraSpi};
 
 const LORA_FREQ_HZ: u32 = 915_000_000;
 
-pub fn new(spi: RadioSpi, cs_pin: RadioCsPin, reset_pin: RadioResetPin, delay: Delay) -> Radio {
+pub fn new(spi: LoraSpi, cs_pin: LoraCSPin, reset_pin: LoraResetPin, delay: Delay) -> Radio {
     let mut rfm95 = Rfm95Driver::new(spi.forward(), cs_pin.forward(), reset_pin.forward(), DelayWrapper(delay)).unwrap();
 
     // 62.5kHz bandwidth, 4/5 coding rate, SF10 gives a bitrate of about 500bps.
@@ -28,7 +28,7 @@ pub fn new(spi: RadioSpi, cs_pin: RadioCsPin, reset_pin: RadioResetPin, delay: D
     Radio{driver: rfm95}
 }
 
-pub type RFM95 = Rfm95Driver<Forward<SpiBus<RadioEusci>>, Forward<Pin<P4, Pin4, Output>, embedded_hal_compat::markers::ForwardOutputPin>>;
+pub type RFM95 = Rfm95Driver<Forward<SpiBus<LoraEusci>>, Forward<LoraCSPin, embedded_hal_compat::markers::ForwardOutputPin>>;
 /// Top-level interface for the radio module.
 pub struct Radio {
     pub driver: RFM95,
