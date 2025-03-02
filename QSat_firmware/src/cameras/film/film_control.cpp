@@ -2,9 +2,9 @@
 #include <cameras/film/servo_9g.h>
 #include <definitions/pins.h>
 
-int reload_center = 0;
+int reload_center = 180;
 
-int trigger_press_angle = 90;
+int trigger_press_angle = 0;
 
 Servo9G reload_servo(CamTrigServo_Reload, reload_center);
 Servo9G trigger_servo(CamTrigServo_Trigger, reload_center);
