@@ -1,6 +1,7 @@
 #include "film_control.h"
 #include <cameras/film/servo_9g.h>
 #include <definitions/pins.h>
+#include <sense/current_sense.h>
 
 int reload_center = 180;
 
@@ -26,9 +27,21 @@ void update_servos() {
     }
 
     if (curr_reload_direction == Stationary) {
-        reload_set_direction(Forward);
+        reload_set_direction(Forward);\
+        curr_reload_direction = Forward;
+        return;
     }
+
     // Check if stalled
+    float reload_ma = read_reload_miliamps(); 
+    
+    Serial.print("Reload MA:");
+    Serial.println(reload_ma);
+
+    if (reload_ma > 450) {
+        // Stalled
+
+    }
 }
 
 

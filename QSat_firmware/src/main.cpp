@@ -5,6 +5,7 @@
 
 #include <SPI.h>
 #include <LoRa.h>
+#include "sense/current_sense.h"
 
 bool curr_state;
 
@@ -14,6 +15,7 @@ void setup()
   Serial.println("Starting up");
   led_setup();
   setup_servos();
+  setup_current_sense();
   // setupGps();
   curr_state = sense_light();
 }
