@@ -6,11 +6,13 @@
 #include <XPT2046_Touchscreen.h>
 #include "widgets/connection.h"
 #include "widgets/header.h"
+#include "widgets/line.h"
 
 void display_init() {
     mySpi.begin(XPT2046_CLK, XPT2046_MISO, XPT2046_MOSI, XPT2046_CS);
     ts.begin(mySpi);
     ts.setRotation(1);
+    
 
     // Start the tft display and set it to black
     tft.init();
@@ -59,5 +61,12 @@ void display_loop() {
 void display_update(DisplayUpdate update) {
     tft.fillScreen(TFT_BLACK);
 
-    int last_height = draw_header(update.remoteState);    
+    int last_height = draw_header(update.remoteState);
+    last_height = draw_line("Local State", "DISARMED", last_height);
+    last_height = draw_line("Local Ping", "5s", last_height);
+    last_height = draw_line("Light Flux", "172", last_height);
+    last_height = draw_line("Signal Strength", "-52db", last_height);
+
+
+
 }
