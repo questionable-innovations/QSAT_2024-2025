@@ -3,8 +3,8 @@
 #include <ESP32Servo.h>
 
 int ServoPin = 17;
-// ESP32PWM pwm;
-int freq = 1000;
+Servo pwm;
+int freq = 50;
 
 
 // DEFINITIONS
@@ -27,8 +27,9 @@ void setup_shutter() {
 
     digitalWrite(PWR_ENABLE, LOW);
 
-    // ESP32PWM::allocateTimer(0);
-	// pwm.attachPin(ServoPin, freq, 10); // 1KHz 10 bits
+    ESP32PWM::allocateTimer(0);
+    pwm.setPeriodHertz(freq);
+	pwm.attach(ServoPin, 1000, 2000); // 1KHz 10 bits
 
 }
 
@@ -52,17 +53,17 @@ void fire_shutter() {
     enable_high_power();
 
     Serial.println("Firing Shutter");
-    analogWrite(SHUTTER_PIN, (2*255)/20);
+    // analogWrite(SHUTTER_PIN, (2*255)/20);
     delay(1000);
-    analogWrite(SHUTTER_PIN, (1*255)/20);
+    // analogWrite(SHUTTER_PIN, (1*255)/20);
     // pwm.write(180);
     delay(1000);
 
-    // pwm.write(0);
-    // delay(1000);
-    // pwm.write(180);
-    // delay(1000);
-    // pwm.write(0);
+    pwm.write(0);
+    delay(1000);
+    pwm.write(180);
+    delay(1000);
+    pwm.write(0);
     last_fired_time = millis();
 }
 
