@@ -1,26 +1,24 @@
 #include "radio.h"
-
-#include <WiFi.h>
-
 #include "ESPNowW.h"
 
-#ifdef rocket
+#include <WiFi.h>
+#include <ArduinoJson.h>
+
 uint8_t mac[] = {0x36, 0x33, 0x33, 0x33, 0x33, 0x33};
 uint8_t receiver_mac[] = {0x36, 0x33, 0x33, 0x33, 0x33, 0x32};
-#else
-uint8_t mac[] = {0x36, 0x33, 0x33, 0x33, 0x33, 0x32};
-uint8_t receiver_mac[] = {0x36, 0x33, 0x33, 0x33, 0x33, 0x33};
-#endif
+
+// uint8_t mac[] = {0x36, 0x33, 0x33, 0x33, 0x33, 0x32};
+// uint8_t receiver_mac[] = {0x36, 0x33, 0x33, 0x33, 0x33, 0x33};
 
 unsigned long last_ping_sent = 0;
 unsigned long last_ping_received = 0;
 
-uint8_t isArmed = 0;
+uint8_t isArmed = 0; // 0 -> disarmed, 1 -> armed
 
-unsigned long disconnectTime = 10000;
+unsigned long disconnectTime = 30000; // time before auto-arm
 
 
-void onPingReceived(const uint8_t *mac_addr, const uint8_t *data, int data_len);
+void onMsgReceived(const uint8_t *mac_addr, const uint8_t *data, int data_len);
 
 void setup_radio() {
     WiFi.mode(WIFI_MODE_STA);
@@ -28,13 +26,18 @@ void setup_radio() {
     WiFi.disconnect();
     ESPNow.init();
     ESPNow.add_peer(receiver_mac);
-    ESPNow.reg_recv_cb(onPingReceived);
+    ESPNow.reg_recv_cb(onMsgReceived);
 }
 
 void send_ping() {
     Serial.println("Sending ping");
-    // send ping
-    ESPNow.send_message(receiver_mac, &isArmed, 1);  // 1 for armed, 0 for disarmed
+
+    StaticJsonDocument<200> jsonDoc;
+    jsonDoc["isArmed"] = isArmed;
+    char json[200];
+    serializeJson(jsonDoc, json);
+
+    ESPNow.send_message(receiver_mac, (uint8_t *)json, strlen(json));    
 }
 
 void loop_radio() {
@@ -44,14 +47,11 @@ void loop_radio() {
     }
 
     if (last_ping_received > millis() + disconnectTime) {
-        // no connection probably, arm
-        Serial.println("No connection, exploding");
         isArmed = 1;
     }
 }
 
-void onPingReceived(const uint8_t *mac_addr, const uint8_t *data, int data_len) {
-    // bs start
+void onMsgReceived(const uint8_t *mac_addr, const uint8_t *data, int data_len) {
     char macStr[18];
     snprintf(macStr, sizeof(macStr), "%02x:%02x:%02x:%02x:%02x:%02x",
 	     mac_addr[0], mac_addr[1], mac_addr[2], mac_addr[3], mac_addr[4],
@@ -67,14 +67,19 @@ void onPingReceived(const uint8_t *mac_addr, const uint8_t *data, int data_len) 
 	Serial.printf("%x ", data[i]);
     }
     Serial.println("");
-    // bs finish
+    // ==========================
+    
+    // real code
+    StaticJsonDocument<200> jsonDoc;
+    DeserializationError error = deserializeJson(jsonDoc, data, data_len);
+    if (error) {
+        Serial.print("deserializeJson() failed: ");
+        Serial.println(error.c_str());
+        return;
+    }
 
-    // set isArmed
-    isArmed = data[0];
-    if (isArmed) {
-        Serial.println("RECIEVED 1: System is armed.");
-    } else {
-        Serial.println("DID NOT RECIEVE 1: System is disarmed.");
+    if (jsonDoc.containsKey("isArmed")) {
+        isArmed = jsonDoc["isArmed"];
     }
 
     last_ping_received = millis();
