@@ -19,10 +19,21 @@ void setup_servos() {
 int reload_started = 0;
 int curr_reload_direction = Stationary;
 
-bool testing_stalled = false;
+int testing_stalled = 0;
 
 void update_servos() {
     if (reload_started == 0) {
+        return;
+    }
+
+    int timeout = 10000;
+    if (reload_started + timeout < millis()) {
+        reload_started = 0;
+        Serial.println("\n######## ERR ########");
+        Serial.print("Reload timeout, after");
+        Serial.print(reload_started - millis());
+        Serial.println("ms");
+        Serial.println("####################\n");
         return;
     }
 
@@ -33,10 +44,16 @@ void update_servos() {
     }
 
     // Check if stalled
-    float reload_ma = read_reload_miliamps(); 
+    float reload_ma = read_reload_miliamps();
+    int round_time = millis();
     
     Serial.print("Reload MA:");
     Serial.println(reload_ma);
+
+    if (testing_stalled > 0) {
+        
+
+    }
 
     if (reload_ma > 450) {
         // Stalled
