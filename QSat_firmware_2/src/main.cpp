@@ -15,12 +15,10 @@ void setup() {
   
 }
 
-
 // LOOP
 void loop() {
-  fire_shutter();
-  loop_shutter();
-  
+  // fire_shutter();
+  // loop_shutter();
   
   loop_radio();
 }

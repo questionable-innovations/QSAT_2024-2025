@@ -4,11 +4,9 @@
 #include <WiFi.h>
 #include <ArduinoJson.h>
 
-uint8_t mac[] = {0x36, 0x33, 0x33, 0x33, 0x33, 0x33};
-uint8_t receiver_mac[] = {0x36, 0x33, 0x33, 0x33, 0x33, 0x32};
-
-// uint8_t mac[] = {0x36, 0x33, 0x33, 0x33, 0x33, 0x32};
-// uint8_t receiver_mac[] = {0x36, 0x33, 0x33, 0x33, 0x33, 0x33};
+uint8_t mac[6];
+// uint8_t receiver_mac[] = {0xcc, 0x8d, 0xa2, 0x8d, 0x28, 0x2c}; // ESP 1
+uint8_t receiver_mac[] = {0xcc, 0x8d, 0xa2, 0x8d, 0x07, 0xa8}; // ESP 2
 
 unsigned long last_ping_sent = 0;
 unsigned long last_ping_received = 0;
@@ -22,17 +20,39 @@ void onMsgReceived(const uint8_t *mac_addr, const uint8_t *data, int data_len);
 
 void setup_radio() {
     WiFi.mode(WIFI_MODE_STA);
+
+    // get mac address
+    
+    esp_read_mac(mac, ESP_MAC_WIFI_STA);
+    Serial.print("MAC Address: ");
+    for (int i = 0; i < 6; i++) {
+        Serial.printf("%02x", mac[i]);
+        if (i < 5) {
+            Serial.print(":");
+        }
+    }
+
     ESPNow.set_mac(mac);
+
     WiFi.disconnect();
     ESPNow.init();
     ESPNow.add_peer(receiver_mac);
     ESPNow.reg_recv_cb(onMsgReceived);
+
 }
 
 void send_ping() {
     Serial.println("Sending ping");
 
-    StaticJsonDocument<200> jsonDoc;
+    // Serial.print("MAC Address: ");
+    // for (int i = 0; i < 6; i++) {
+    //     Serial.printf("%02x", mac[i]);
+    //     if (i < 5) {
+    //         Serial.print(":");
+    //     }
+    // }
+
+    JsonDocument jsonDoc;
     jsonDoc["isArmed"] = isArmed;
     char json[200];
     serializeJson(jsonDoc, json);
@@ -49,6 +69,9 @@ void loop_radio() {
     if (last_ping_received > millis() + disconnectTime) {
         isArmed = 1;
     }
+
+    // check for new messages
+    
 }
 
 void onMsgReceived(const uint8_t *mac_addr, const uint8_t *data, int data_len) {
@@ -70,13 +93,17 @@ void onMsgReceived(const uint8_t *mac_addr, const uint8_t *data, int data_len) {
     // ==========================
     
     // real code
-    StaticJsonDocument<200> jsonDoc;
+    JsonDocument jsonDoc;
     DeserializationError error = deserializeJson(jsonDoc, data, data_len);
     if (error) {
         Serial.print("deserializeJson() failed: ");
         Serial.println(error.c_str());
         return;
     }
+
+    // print out the json
+    serializeJsonPretty(jsonDoc, Serial);
+    Serial.println("");
 
     if (jsonDoc.containsKey("isArmed")) {
         isArmed = jsonDoc["isArmed"];
