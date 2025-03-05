@@ -7,11 +7,17 @@ void setup() {
   Serial.println("Booting display...");
   display_init();
   startup_animation();
-  display_update({Armed, Disarmed, 0, 0, 0});
+  display_update({
+    .localState = Disarmed,
+    .remoteState = Armed,
+    .lastUpdateMillis = millis(),
+    .lightFlux = 172,
+    .localRssi = -52.2
+  });
+  Serial.println("Display booted.");
 }
 
 // Don't block/delay on main thread, it'll break touch-responsiveness 
 void loop() {
   display_loop();
-  
 }

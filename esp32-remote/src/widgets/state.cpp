@@ -38,10 +38,10 @@ void convert_state_to_color(ArmState state, uint16_t* color) {
 
             break;
         case Neutral:
-            *color = createRGB(11, 11, 11);
+            *color = createRGB(11, 20, 11);
             break;
         case Disconnected:
-            *color = TFT_WHITE;
+            *color = createRGB(30, 40, 11);
             break;
     }
 }

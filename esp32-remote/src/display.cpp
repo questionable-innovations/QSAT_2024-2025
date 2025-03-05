@@ -7,6 +7,9 @@
 #include "widgets/connection.h"
 #include "widgets/header.h"
 #include "widgets/line.h"
+#include "widgets/hr.h"
+
+void part_update_seconds();
 
 void display_init() {
     mySpi.begin(XPT2046_CLK, XPT2046_MISO, XPT2046_MOSI, XPT2046_CS);
@@ -50,22 +53,73 @@ void printTouchToSerial(TS_Point p) {
   Serial.println();
 }
 
+long int last_update_ms = 0;
+DisplayUpdate last_update = {Neutral, Neutral, 0, 0, 0};
+
+int last_update_seconds = 0;
+
 void display_loop() {
   if (ts.tirqTouched() && ts.touched()) {
     TS_Point p = ts.getPoint();
     printTouchToSerial(p);
     delay(100);
   }
+
+  if (millis() - last_update_ms > 100) {
+    part_update_seconds();
+  }
+}
+
+void part_update_seconds() {
+  if (last_update.lastUpdateMillis == 0) {
+    return;
+  }
+
+  int seconds_since_last_ping = (millis() - last_update.lastUpdateMillis) / 1000;
+  if (seconds_since_last_ping != last_update_seconds) {
+    Serial.print("Seconds since last ping: ");
+    Serial.println(seconds_since_last_ping);
+    last_update_seconds = seconds_since_last_ping;
+    display_update(last_update);
+  }
 }
 
 void display_update(DisplayUpdate update) {
-    tft.fillScreen(TFT_BLACK);
+    last_update = update;
+    last_update_ms = millis();
+    
+    // tft.fillScreen(TFT_BLACK);
 
     int last_height = draw_header(update.remoteState);
-    last_height = draw_line("Local State", "DISARMED", last_height);
-    last_height = draw_line("Local Ping", "5s", last_height);
-    last_height = draw_line("Light Flux", "172", last_height);
-    last_height = draw_line("Signal Strength", "-52db", last_height);
+    
+    // Local State
+    char localState[24];
+    convert_state_to_string(update.localState, (localState));
+    last_height = draw_hr(last_height);
+    last_height = draw_line("Local State", localState, last_height, update.localState);
+
+
+    // Calculate last ping time
+    last_height = draw_hr(last_height);
+    if (update.lastUpdateMillis == 0) {
+      last_height = draw_line("Local Ping", "N/A", last_height, Disconnected);
+    } else {
+      char last_ping[24];
+      int seconds_since_last_ping = (millis() - last_update.lastUpdateMillis) / 1000;
+      sprintf(last_ping, "%ds", seconds_since_last_ping);
+      last_height = draw_line("Local Ping", last_ping, last_height, Neutral);
+    }
+
+
+    last_height = draw_hr(last_height);
+    last_height = draw_line("Light Flux", "172", last_height, Neutral);
+    
+    last_height = draw_hr(last_height);
+    last_height = draw_line("Signal Strength", "-52db", last_height, Neutral);
+    
+    
+    last_height = draw_hr(last_height);
+
 
 
 

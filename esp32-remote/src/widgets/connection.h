@@ -14,9 +14,12 @@
 
 extern const int height;
 extern const int width;
+const int standard_margin = 8;
 
 extern SPIClass mySpi;
 extern XPT2046_Touchscreen ts;
 
 extern TFT_eSPI tft;
+
+
 
