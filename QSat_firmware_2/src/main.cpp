@@ -18,7 +18,7 @@ void setup() {
   Serial.println("Starting up");
   setup_shutter();
   setup_radio();
-
+  
 }
 
 
