@@ -1,11 +1,13 @@
 #include <Arduino.h>
 #include "display.h"
+#include "radio.h"
 #include "widgets/state.h"
 
 void setup() {
   Serial.begin(115200);
   Serial.println("Booting display...");
   display_init();
+  setup_radio();
   startup_animation();
   display_update({
     .localState = Disarmed,
@@ -20,4 +22,5 @@ void setup() {
 // Don't block/delay on main thread, it'll break touch-responsiveness 
 void loop() {
   display_loop();
+  loop_radio(); 
 }
