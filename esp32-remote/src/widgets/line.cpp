@@ -1,8 +1,5 @@
-#pragma once
-
-#include "connection.h"
-#include "state.h"
 #include "line.h"
+#include "connection.h"
 
 int draw_line(char* key, char* value, int start_height, ArmState colour) {
     int box_height = 32;

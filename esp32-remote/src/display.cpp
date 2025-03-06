@@ -4,10 +4,12 @@
 #include <SPI.h>
 #include <TFT_eSPI.h>
 #include <XPT2046_Touchscreen.h>
+
 #include "widgets/connection.h"
 #include "widgets/header.h"
 #include "widgets/line.h"
 #include "widgets/hr.h"
+#include "widgets/arm_button.h"
 
 void part_update_seconds();
 
@@ -34,7 +36,7 @@ void startup_animation() {
 
     tft.fillScreen(TFT_BLACK);
     tft.setTextColor(TFT_WHITE, TFT_BLACK, true);
-    tft.setTextDatum(MC_DATUM);
+    tft.setTextDatum(CC_DATUM);
     tft.setFreeFont(FSSB24);                 // Select the font
     tft.drawCentreString("QSAT", width/2 , height/2, GFXFF);
     delay(2000);
@@ -121,6 +123,7 @@ void display_update(DisplayUpdate update) {
     last_height = draw_hr(last_height);
 
 
-
+    draw_button(update.localState, false, Left, last_height);
+    last_height = draw_button(update.remoteState, false, Right, last_height);
 
 }

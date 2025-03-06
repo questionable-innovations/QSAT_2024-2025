@@ -19,7 +19,7 @@ int draw_header(ArmState state) {
     int big_text_start = ((box_height)/2);
 
     tft.setFreeFont(FSS9);                 // Select the font
-    tft.drawCentreString("CURRENT STATE", width/2 , (big_text_start-9)/2, GFXFF);
+    tft.drawCentreString("REMOTE STATE", width/2 , (big_text_start-9)/2, GFXFF);
 
 
     tft.setFreeFont(FSSB18);                 // Select the font
