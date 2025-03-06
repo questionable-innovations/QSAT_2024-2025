@@ -11,6 +11,13 @@
 #include "widgets/hr.h"
 #include "widgets/arm_button.h"
 
+void (*armCallback)(void);
+void (*disarmCallback)(void);
+
+int buttonStart = 0;
+int buttonEnd = 0;
+
+
 void part_update_seconds();
 
 void display_init() {
@@ -64,7 +71,27 @@ void display_loop() {
   if (ts.tirqTouched() && ts.touched()) {
     TS_Point p = ts.getPoint();
     printTouchToSerial(p);
-    delay(100);
+
+    if (p.y > buttonStart && p.y < buttonEnd) {
+      if (p.x < width/2) {
+        // Disarm
+        if (disarmCallback == 0) {
+          Serial.println("Disarm callback is null, skipping");
+        } else {
+          Serial.println("Disarm callback pressed, running");
+          disarmCallback();
+        }
+      } else {
+        // Arm
+        if (armCallback == 0) {
+          Serial.println("Arm callback is null, skipping");
+        } else {
+          Serial.println("Arm callback pressed, running");
+          armCallback();
+        }
+
+      }
+    }
   }
 
   if (millis() - last_update_ms > 100) {
@@ -104,26 +131,34 @@ void display_update(DisplayUpdate update) {
     // Calculate last ping time
     last_height = draw_hr(last_height);
     if (update.lastUpdateMillis == 0) {
-      last_height = draw_line("Local Ping", "N/A", last_height, Disconnected);
+      last_height = draw_line("Last Ping", "N/A", last_height, Disconnected);
     } else {
       char last_ping[24];
       int seconds_since_last_ping = (millis() - last_update.lastUpdateMillis) / 1000;
       sprintf(last_ping, "%ds", seconds_since_last_ping);
-      last_height = draw_line("Local Ping", last_ping, last_height, Neutral);
+      last_height = draw_line("Last Ping", last_ping, last_height, Neutral);
     }
 
+    // LIGHT FLUX
+    char lightFlux[24];
+    sprintf(lightFlux, "%d", update.lightFlux);
 
     last_height = draw_hr(last_height);
-    last_height = draw_line("Light Flux", "172", last_height, Neutral);
+    last_height = draw_line("Light Flux", lightFlux, last_height, Neutral);
     
+    // Signal Strength
+    char signalStrength[24];
+    sprintf(signalStrength, "%.1f", update.localRssi);
+
     last_height = draw_hr(last_height);
-    last_height = draw_line("Signal Strength", "-52db", last_height, Neutral);
+    last_height = draw_line("Signal Strength", signalStrength, last_height, Neutral);
     
     
     last_height = draw_hr(last_height);
 
-
-    draw_button(update.localState, false, Left, last_height);
-    last_height = draw_button(update.remoteState, false, Right, last_height);
+    buttonStart = last_height - standard_margin;
+    draw_button(update.localState, update.localState == Disarmed, Left, last_height);
+    last_height = draw_button(update.remoteState, update.localState == Armed, Right, last_height);
+    buttonEnd = last_height + standard_margin;
 
 }
