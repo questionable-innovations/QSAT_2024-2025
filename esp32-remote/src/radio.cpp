@@ -7,11 +7,13 @@
 uint8_t mac[6];
 // uint8_t receiver_mac[] = {0xcc, 0x8d, 0xa2, 0x8d, 0x28, 0x2c}; // TAINE'S TEST ESP 1
 uint8_t receiver_mac[] = {0xcc, 0x8d, 0xa2, 0x8d, 0x07, 0xa8}; // TAINE'S TEST ESP 2
+// uint8_t receiver_mac[] = {} // CYD
 
 unsigned long last_ping_sent = 0;
 unsigned long last_ping_received = 0;
 
-uint8_t isArmed = 0; // 0 -> disarmed, 1 -> armed
+uint8_t sendingState = 2; // 0 = disarmed, 1 = armed, 2 = do not change
+uint8_t lastReceivedState = 0; // 0 = disarmed, 1 = armed
 
 unsigned long disconnectTime = 30000; // time before auto-arm
 
@@ -30,15 +32,17 @@ void setup_radio() {
     ESPNow.reg_recv_cb(onMsgReceived);
 }
 
-
-
 void send_ping() {
     Serial.println("Sending ping");
 
     printMac();
 
     JsonDocument jsonDoc;
-    jsonDoc["isArmed"] = isArmed;
+    if (sendingState != 2) {
+        jsonDoc["isArmed"] = sendingState;
+    } else {
+        jsonDoc["ping"] = true;
+    }
     char json[200];
     serializeJson(jsonDoc, json);
 
@@ -62,14 +66,7 @@ void loop_radio() {
     if (millis() - last_ping_sent > 1000) {
         send_ping();
         last_ping_sent = millis();
-    }
-
-    if (last_ping_received > millis() + disconnectTime) {
-        isArmed = 1;
-    }
-
-    // check for new messages
-    
+    }    
 }
 
 void onMsgReceived(const uint8_t *mac_addr, const uint8_t *data, int data_len) {
@@ -104,9 +101,20 @@ void onMsgReceived(const uint8_t *mac_addr, const uint8_t *data, int data_len) {
     Serial.println("");
 
     if (jsonDoc.containsKey("isArmed")) {
-        isArmed = jsonDoc["isArmed"];
+        lastReceivedState = jsonDoc["isArmed"];
     }
 
     last_ping_received = millis();
 }
 
+int getSendingState() {
+    return sendingState;
+}
+
+int getTimeSinceLastPing() {
+    return millis() - last_ping_received;
+}
+
+int getLastReceivedState() {
+    return lastReceivedState;
+}
